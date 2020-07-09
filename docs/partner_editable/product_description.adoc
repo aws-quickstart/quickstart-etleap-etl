@@ -2,7 +2,7 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Etleap is an extract, transform, load, and transform (ETLT) service for building data warehouses with Amazon Redshift and data lakes with Amazon S3 and AWS Glue.
+Etleap ETL is an extract, transform, load, and transform (ETLT) service for building data warehouses with Amazon Redshift and data lakes with Amazon S3 and AWS Glue.
 
 * Extract from any source, including databases, applications, files, and event streams. Even legacy on-prem sources can be integrated with no extra effort.
 * Transform and preview your data using Etleap’s interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster included with this Quick Start.

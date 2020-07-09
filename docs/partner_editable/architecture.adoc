@@ -14,20 +14,20 @@ As shown in Figure 1, the Quick Start sets up the following:
 * An Amazon S3 bucket used by Etleap to store extracted and transformed data.
 * Four AWS Identity and Access Management (IAM) roles:
 
-* One attached to the Etleap Amazon EC2 instance.
-* One attached to the Amazon EMR cluster nodes.
-* One used by Amazon EMR for auto-scaling.
-* One used to access data in the Amazon S3 bucket.
+** One attached to the Etleap Amazon EC2 instance.
+** One attached to the Amazon EMR cluster nodes.
+** One used by Amazon EMR for auto-scaling.
+** One used to access data in the Amazon S3 bucket.
 
 * Two AWS Key Management Service (KMS) keys in different AWS regions used to encrypt secrets within Etleap.
 * In the public subnets:
 
-* A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.*
-* An Amazon EC2 instance running Etleap.
+** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.*
+** An Amazon EC2 instance running Etleap.
 
 * In the private subnets:
 
-* An Amazon RDS MySQL database used by Etleap to store metadata.
-* An Amazon EMR cluster used by Etleap to run extractions and transformations.
+** An Amazon RDS MySQL database used by Etleap to store metadata.
+** An Amazon EMR cluster used by Etleap to run extractions and transformations.
 
-*** The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.
+\* The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.

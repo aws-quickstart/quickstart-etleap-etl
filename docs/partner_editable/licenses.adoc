@@ -1,4 +1,4 @@
 // Include details about the license and how they can sign up. If no license is required, clarify that. 
 
 // Or, if the deployment uses an AMI, update this paragraph. If it doesn’t, remove the paragraph.
-_<AMI information>This Quick Start requires either a subscription to the AMI for Etleap in AWS Marketplace or a license provided by Etleap. An AMI subscription is available from https://aws.amazon.com/marketplace/[AWS Marketplace^]. Additional pricing, terms, and conditions may apply. For instructions, see link:#step-2.-subscribe-to-the-software-ami[step 2] in the deployment section._
+This Quick Start requires either a subscription to the AMI for Etleap in AWS Marketplace or a license provided by Etleap. An AMI subscription is available from https://aws.amazon.com/marketplace/pp/B07NM5J1PB?qid=1594321833265&sr=0-1&ref_=srh_res_product_title[AWS Marketplace^]. Additional pricing, terms, and conditions may apply. For instructions, see link:#step-2.-subscribe-to-the-software-ami[step 2] in the deployment section._
