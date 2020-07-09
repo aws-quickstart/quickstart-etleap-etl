@@ -68,8 +68,6 @@ Metadata:
         default: Quick Start S3 key prefix
       DeploymentOption:
         default: Option to deploy etleap as High Availability or Regular
-      AllowedIPCidr:
-        default: Allowed IP CIDR
 
 Parameters:
   DeploymentId:

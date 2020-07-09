@@ -1,0 +1,42 @@
+
+.VPC configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default Value|Description|VPC to deploy Etleap
+(`UserSpecifiedVPCId`)|`**__Requires Input__**`|The VPC in which to deploy ETLeap.|Public subnet A
+(`PublicSubnetA`)|`**__Requires Input__**`|The first public subnet.|Public subnet B
+(`PublicSubnetB`)|`**__Requires Input__**`|The second public subnet.|Private subnet A
+(`PrivateSubnetA`)|`**__Requires Input__**`|The first private subnet.|Private subnet B
+(`PrivateSubnetB`)|`**__Requires Input__**`|The second private subnet.|Allowed IP CIDR block
+(`AllowedIPCidr`)|`0.0.0.0/0`|CIDR block allowed remote access to the environment.
+|===
+.Etleap configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default Value|Description|Key pair name
+(`KeyPairName`)|`**__Requires Input__**`|EC2 key pair name.|Deployment ID
+(`DeploymentId`)|``|The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.|Deployment secret - optional
+(`UserSpecifiedDeploymentSecret`)|``|The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
+The ARN of the secret that is used in the deployment will be present in the outputs.
+If you have previously launched Etleap with the same deployment ID, please make sure you use the same secret key.
+|First name
+(`FirstName`)|`**__Requires Input__**`|Your first name.|Last name
+(`LastName`)|`**__Requires Input__**`|Your last name.|Email address
+(`Email`)|`**__Requires Input__**`|Your email address.|Etleap initial login password
+(`SetupPassword`)|`**__Requires Input__**`|Your initial login password. You will be asked to change this when you log in for the first time.|Option to deploy etleap as High Availability or Regular
+(`DeploymentOption`)|`Regular`|Deploy Etleap in High Availability mode.
+|===
+.AWS Quick Start configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default Value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the Quick Start assets. Quick Start bucket name
+can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+It cannot start or end with a hyphen (-).
+|Quick Start S3 bucket region
+(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`**__Requires Input__**`|S3 key prefix for the Quick Start assets. Quick Start key prefix
+can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+forward slashes (/).
+
+|===

@@ -2,22 +2,19 @@
 //Should any sections not be applicable, remove them
 
 == Test the deployment
-// If steps are required to test the deployment, add them here. If not, remove the heading
+Once the stack has been successfully created, the *Outputs* tab shows the IP address of the Etleap instance, as well as the email and password you can use to log in.
 
-== Post deployment steps
-// If Post-deployment steps are required, add them here. If not, remove the heading
+[[best-practices-for-using-etleap-on-aws]]
+== Best practices for using Etleap on AWS
 
-== Best practices for using {partner-product-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+Once logged in, the onboarding guide will help you get started with Etleap. For additional guidance and best practices, use the in-application link to the product documentation.
 
-_Add any best practices for using the software._
-
+[[security]]
 == Security
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
 
-_Add any security-related information._
+Etleap is accessed via HTTPS only, and it is recommended that you restrict the IP range in the _Etleap App_ EC2 Security Group for port 443 to just the IP addresses that you will use to access Etleap. Alternatively, you may launch the Etleap EC2 instance in a private subnet.
 
-== Other useful information
-//Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
+[[support]]
+== Support
 
-_Add any other details that will help the customer use the software on AWS._
+Etleap’s support team is standing by to assist you in configuring connections and operating your pipelines. Please reach out via in-application instant message or email support@etleap.com.

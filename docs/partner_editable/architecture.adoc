@@ -1,30 +1,33 @@
 Deploying this Quick Start for a new virtual private cloud (VPC) with
-*default parameters* builds the following _{partner-product-name}_ environment in the
+*default parameters* builds the following Etleap ETL environment in the
 AWS Cloud.
 
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
 [#architecture1]
 .Quick Start architecture for _{partner-product-name}_ on AWS
 [link=images/architecture_diagram.png]
-image::../images/architecture_diagram.png[Architecture,width=648,height=439]
+image::../images/image1.png[image,width=643,height=489]
 
 As shown in Figure 1, the Quick Start sets up the following:
 
-* A highly available architecture that spans two Availability Zones.*
-* A VPC configured with public and private subnets, according to AWS
-best practices, to provide you with your own virtual network on AWS.*
+* A VPC configured with public and a private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*
+* An Amazon S3 bucket used by Etleap to store extracted and transformed data.
+* Four AWS Identity and Access Management (IAM) roles:
 
-In the public subnets:
+* One attached to the Etleap Amazon EC2 instance.
+* One attached to the Amazon EMR cluster nodes.
+* One used by Amazon EMR for auto-scaling.
+* One used to access data in the Amazon S3 bucket.
 
-* Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*
-* A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*
+* Two AWS Key Management Service (KMS) keys in different AWS regions used to encrypt secrets within Etleap.
+* In the public subnets:
 
-In the private subnets:
-// Add bullet points for any additional components that are included in the deployment. Make sure that the additional components are also represented in the architecture diagram.
-* <describe any additional components>.
+* A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.*
+* An Amazon EC2 instance running Etleap.
 
-*The template that deploys the Quick Start into an existing VPC skips
-the components marked by asterisks and prompts you for your existing VPC
-configuration.
+* In the private subnets:
+
+* An Amazon RDS MySQL database used by Etleap to store metadata.
+* An Amazon EMR cluster used by Etleap to run extractions and transformations.
+
+*** The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.

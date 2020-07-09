@@ -1,1 +1,6 @@
-// placeholder
+
+=== Launch into an existing VPC
+include::etleap-existing-vpc-interface.template.adoc[]
+
+=== Launch into a new VPC
+include::etleap-new-vpc-interface.template.adoc[]
