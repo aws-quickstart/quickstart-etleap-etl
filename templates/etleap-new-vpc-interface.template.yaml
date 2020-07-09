@@ -5,6 +5,9 @@ Description: "Creates an Etleap deployment inside a newly created VPC. (qs-1qqbl
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Launch into a new VPC"
+    OptionalParameters:
+      - DeploymentId
+      - UserSpecifiedDeploymentSecret
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
