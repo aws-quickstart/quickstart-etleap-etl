@@ -29,7 +29,7 @@ Metadata:
       - LastName
       - Email
       - SetupPassword
-      - DeploymentOption
+#      - DeploymentOption
     - Label:
         default: AWS Quick Start configuration
       Parameters:
@@ -69,8 +69,8 @@ Metadata:
         default: Quick Start S3 bucket region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
-      DeploymentOption:
-        default: Option to deploy etleap as High Availability or Regular
+#      DeploymentOption:
+#        default: Option to deploy etleap as High Availability or Regular
 
 Parameters:
   DeploymentId:
@@ -111,13 +111,13 @@ Parameters:
     MaxLength: 64
     ConstraintDescription: "Must be between 8 and 64 characters long."
     NoEcho: 'true'
-  DeploymentOption:
-    Type: String
-    Description: "Deploy Etleap in High Availability mode."
-    Default: Regular
-    AllowedValues:
-    - Regular
-    - High Availability
+#  DeploymentOption:
+#    Type: String
+#    Description: "Deploy Etleap in High Availability mode."
+#    Default: Regular
+#    AllowedValues:
+#    - Regular
+#    - High Availability
   UserSpecifiedVPCId:
     Type: "AWS::EC2::VPC::Id"
     Description: "The VPC in which to deploy ETLeap."
@@ -186,7 +186,7 @@ Resources:
         LastName: !Ref LastName        
         Email: !Ref Email
         SetupPassword: !Ref SetupPassword
-        DeploymentOption: !Ref DeploymentOption
+        DeploymentOption: Regular
         UserSpecifiedVPCId: !Ref UserSpecifiedVPCId
         PublicSubnetA: !Ref PublicSubnetA
         PublicSubnetB: !Ref PublicSubnetB

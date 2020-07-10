@@ -20,8 +20,7 @@ If you have previously launched Etleap with the same deployment ID, please make 
 (`FirstName`)|`**__Requires Input__**`|Your first name.|Last name
 (`LastName`)|`**__Requires Input__**`|Your last name.|Email address
 (`Email`)|`**__Requires Input__**`|Your email address.|Etleap initial login password
-(`SetupPassword`)|`**__Requires Input__**`|Your initial login password. You will be asked to change this when you log in for the first time.|Option to deploy etleap as High Availability or Regular
-(`DeploymentOption`)|`Regular`|Deploy Etleap in High Availability mode.
+(`SetupPassword`)|`**__Requires Input__**`|Your initial login password. You will be asked to change this when you log in for the first time.
 |===
 .AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
