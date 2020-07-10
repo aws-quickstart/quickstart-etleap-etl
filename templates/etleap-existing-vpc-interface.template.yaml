@@ -110,6 +110,7 @@ Parameters:
     MinLength: 8
     MaxLength: 64
     ConstraintDescription: "Must be between 8 and 64 characters long."
+    NoEcho: 'true'
   DeploymentOption:
     Type: String
     Description: "Deploy Etleap in High Availability mode."

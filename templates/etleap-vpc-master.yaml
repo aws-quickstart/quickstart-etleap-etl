@@ -266,6 +266,9 @@ Resources:
         EtleapEMRAutoscalingDefaultRole: !GetAtt EtleapIAMStack.Outputs.EtleapEMRAutoscalingDefaultRole
         EtleapEMRSubnetId: !If [CreateVPC, !GetAtt EtleapVPCStack.Outputs.PublicSubnetB, !Ref PublicSubnetB]
         EtleapInternalSecurityGroup: !Ref EtleapInternalSecurityGroup
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TemplateURL:
         !Sub
           - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/emr.yaml"
