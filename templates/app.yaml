@@ -170,7 +170,8 @@ Resources:
   S3IntermediateBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Join ["-", [!Sub "etleap-${DeploymentId}-intermediate", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+#      BucketName: !Join ["-", [!Sub "etleap-${DeploymentId}-intermediate", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      BucketName: !Sub "etleap-${DeploymentId}-intermediate"
 
   S3IntermediateRole:
     Type: "AWS::IAM::Role"
