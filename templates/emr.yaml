@@ -109,34 +109,19 @@ Resources:
       BootstrapActions:
       - Name: "Configure Fair Scheduler"
         ScriptBootstrapAction: 
-          Path: 
-            !Sub
-              - s3://${S3Bucket}/${QSS3KeyPrefix}scripts/download-fair-scheduler-config.sh
-              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          Path: "s3://datadanze-emr/conf-hadoop2/download-fair-scheduler-config.sh"
       - Name: "Add Etleap-provided JARs"
         ScriptBootstrapAction:
-          Path: 
-            !Sub
-              - s3://${S3Bucket}/${QSS3KeyPrefix}scripts/add-app-provided-libs.sh
-              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          Path: "s3://datadanze-emr/conf-hadoop2/add-app-provided-libs.sh"
       - Name: "Replace the Java keystore with Etleap's"
         ScriptBootstrapAction:
-          Path: 
-            !Sub
-              - s3://${S3Bucket}/${QSS3KeyPrefix}scripts/install-etleap-keystore.sh
-              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          Path: "s3://datadanze-emr/conf-hadoop2/install-etleap-keystore.sh"
       - Name: "Set TCP keepalive"
         ScriptBootstrapAction:
-          Path:
-            !Sub
-              - s3://${S3Bucket}/${QSS3KeyPrefix}scripts/set-tcp-keepalive.sh
-              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          Path: "s3://datadanze-emr/conf-hadoop2/set-tcp-keepalive.sh"
       - Name: "Copy HDFS init script"
         ScriptBootstrapAction:
-          Path: 
-            !Sub
-              - s3://${S3Bucket}/${QSS3KeyPrefix}scripts/copy-hdfs-init.sh
-              - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          Path: "s3://datadanze-emr/conf-hadoop2/copy-hdfs-init.sh"
   
   EMRTask:
     Type: "AWS::EMR::InstanceGroupConfig"
