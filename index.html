@@ -771,9 +771,9 @@ table p {
 <div id="toctitle"></div>
 <ul class="sectlevel1">
 <li><a href="#_overview">Overview</a></li>
-<li><a href="#_etl_on_aws"><em>ETL</em> on AWS</a></li>
+<li><a href="#_etl_on_aws">ETL on AWS</a></li>
 <li><a href="#_cost">Cost</a></li>
-<li><a href="#_software_licenses">Software Licenses</a></li>
+<li><a href="#_software_licenses">Software licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_planning_the_deployment">Planning the deployment</a>
 <ul class="sectlevel2">
@@ -782,7 +782,7 @@ table p {
 <li><a href="#_technical_requirements">Technical requirements</a></li>
 </ul>
 </li>
-<li><a href="#_deployment_steps">Deployment Steps</a>
+<li><a href="#_deployment_steps">Deployment steps</a>
 <ul class="sectlevel2">
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
 <li><a href="#_subscribe_to_the_etl_ami">Subscribe to the ETL AMI</a></li>
@@ -798,7 +798,7 @@ table p {
 <li><a href="#_troubleshooting">Troubleshooting</a></li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
 <li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
-<li><a href="#_github_repository">GitHub Repository</a>
+<li><a href="#_github_repository">GitHub repository</a>
 <ul class="sectlevel3">
 <li><a href="#_notices">Notices</a></li>
 </ul>
@@ -842,10 +842,7 @@ report bugs, or submit feature ideas for this Quick Start.
 instructions for deploying ETL on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p><a id="_Toc481076926"></a>This Quick Start is for users who want to run Etleap within an existing or new VPC in their own AWS account.</p>
-</div>
-<div class="paragraph">
-<p><a id="_Toc535566609"></a>Please know that we may share who uses AWS Quick Starts with the AWS Partner Network (APN) Partner that collaborated with AWS on the content of the Quick Start.</p>
+<p>This Quick Start is for users who want to run ETL within an existing or new virtual private cloud (VPC) in their own AWS account. When deploying to a new VPC, the Quick Start builds a new AWS environment with the VPC and all required infrastructure components.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -864,27 +861,27 @@ collaborated with AWS on the content of the Quick Start.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_etl_on_aws"><em>ETL</em> on AWS</h2>
+<h2 id="_etl_on_aws">ETL on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap ETL is an extract, transform, load, and transform (ETLT) service for building data warehouses with Amazon Redshift and data lakes with Amazon S3 and AWS Glue.</p>
+<p>Etleap is an extract, transform, and load (ETL) service for building data warehouses using Amazon Redshift and data lakes using Amazon Simple Storage Service (Amazon S3) and AWS Glue. Using Etleap on the AWS Cloud, you can:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Extract from any source, including databases, applications, files, and event streams. Even legacy on-prem sources can be integrated with no extra effort.</p>
+<p>Extract from any source, including databases, applications, files, and event streams. Even legacy on-premises sources can be integrated with no extra effort.</p>
 </li>
 <li>
-<p>Transform and preview your data using Etleap’s interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster included with this Quick Start.</p>
+<p>Transform and preview your data using Etleap’s interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster, which is included with this Quick Start.</p>
 </li>
 <li>
-<p>Load into an Amazon Redshift data warehouse or an Amazon S3 / AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.</p>
+<p>Load to an Amazon Redshift data warehouse or an Amazon S3 with AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.</p>
 </li>
 <li>
 <p>Model your data with SQL queries for unification and performance, and let Etleap maintain dependencies and orchestration.</p>
 </li>
 <li>
-<p>Operate your pipelines without headaches. Automatic detection and guided resolution of schema changes and performance issues keeps your data repository available, reliable, and fast.</p>
+<p>Operate your pipelines without headaches. Automatic detection and guided resolution of schema changes and performance issues keep your data repository available, reliable, and fast.</p>
 </li>
 </ul>
 </div>
@@ -895,7 +892,7 @@ collaborated with AWS on the content of the Quick Start.
 <div class="sectionbody">
 <div class="paragraph">
 <p>You are responsible for the cost of the AWS services used while running
-this Quick Start reference deployment. There is no additional cost for
+this Quick Start. There is no additional cost for
 using the Quick Start.</p>
 </div>
 <div class="paragraph">
@@ -911,7 +908,7 @@ see the pricing pages for each AWS service you will use. Prices are subject to c
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-After you deploy the Quick Start, we recommend that you enable the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Report</a>. This report delivers billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. It provides cost estimates based on usage throughout each month and finalizes the data at the end of the month. For more information about the report, see the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">AWS documentation</a>.
+After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Report</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. It provides cost estimates based on usage throughout each month and finalizes the data at the end of the month. For more information about the report, see the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">AWS documentation</a>.
 </td>
 </tr>
 </table>
@@ -919,10 +916,10 @@ After you deploy the Quick Start, we recommend that you enable the <a href="http
 </div>
 </div>
 <div class="sect1">
-<h2 id="_software_licenses">Software Licenses</h2>
+<h2 id="_software_licenses">Software licenses</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start requires either a subscription to the AMI for Etleap in AWS Marketplace or a license provided by Etleap. An AMI subscription is available from <a href="https://aws.amazon.com/marketplace/pp/B07NM5J1PB?qid=1594321833265&amp;sr=0-1&amp;ref_=srh_res_product_title" target="_blank" rel="noopener">AWS Marketplace</a>. Additional pricing, terms, and conditions may apply. For instructions, see <a href="#step-2.-subscribe-to-the-software-ami">step 2</a> in the deployment section._</p>
+<p>This Quick Start requires either a subscription to the (Amazon Machine Image) AMI for Etleap or a license provided by Etleap. An AMI subscription is available from <a href="https://aws.amazon.com/marketplace/pp/B07NM5J1PB?qid=1594321833265&amp;sr=0-1&amp;ref_=srh_res_product_title" target="_blank" rel="noopener">AWS Marketplace</a>. Additional pricing, terms, and conditions may apply. For instructions, see the <strong>Deployment steps</strong> section below.</p>
 </div>
 </div>
 </div>
@@ -930,15 +927,15 @@ After you deploy the Quick Start, we recommend that you enable the <a href="http
 <h2 id="_architecture">Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Deploying this Quick Start for a new virtual private cloud (VPC) with
-<strong>default parameters</strong> builds the following Etleap ETL environment in the
+<p>Deploying this Quick Start for a new VPC with
+default parameters builds the following Etleap ETL environment in the
 AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram.png"><img src="images/image1.png" alt="image" width="643" height="489"></a>
+<a class="image" href="images/architecture_diagram.png"><img src="images/architecture_diagram.png" alt="Architectural diagram" width="643" height="489"></a>
 </div>
-<div class="title">Figure 1. Quick Start architecture for <em>ETL</em> on AWS</div>
+<div class="title">Figure 1. Quick Start architecture for ETL on AWS</div>
 </div>
 <div class="paragraph">
 <p>As shown in Figure 1, the Quick Start sets up the following:</p>
@@ -946,7 +943,7 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A VPC configured with public and a private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
+<p>A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.<sup class="footnote" id="_footnote_note">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
 </li>
 <li>
 <p>An Amazon S3 bucket used by Etleap to store extracted and transformed data.</p>
@@ -978,7 +975,7 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.*</p>
+<p>A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.<sup class="footnoteref">[<a class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
 </li>
 <li>
 <p>An Amazon EC2 instance running Etleap.</p>
@@ -991,7 +988,7 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>An Amazon RDS MySQL database used by Etleap to store metadata.</p>
+<p>An Amazon Relational Database Service (Amazon RDS) MySQL database used by Etleap to store metadata.</p>
 </li>
 <li>
 <p>An Amazon EMR cluster used by Etleap to run extractions and transformations.</p>
@@ -1000,9 +997,6 @@ AWS Cloud.</p>
 </div>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>\* The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.</p>
 </div>
 </div>
 </div>
@@ -1021,10 +1015,7 @@ deploy, and operate your infrastructure and applications on the AWS
 Cloud.</p>
 </div>
 <div class="paragraph">
-<p><a id="_Automated_Deployment"></a><a id="_Deployment_Options"></a><a id="_Toc462612194"></a><a id="_Toc470792037"></a>This Quick Start assumes familiarity with your data sources and with Amazon Redshift and/or Amazon S3 / AWS Glue data lakes.</p>
-</div>
-<div class="paragraph">
-<p>This deployment guide also requires a moderate level of familiarity with AWS services. If you’re new to AWS, visit the <a href="https://aws.amazon.com/getting-started/">Getting Started Resource Center</a> and the <a href="https://aws.amazon.com/training/">AWS Training and Certification website</a>. These sites provide materials for learning how to design, deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
+<p>This Quick Start assumes that you are familiar with your data sources, Amazon Redshift, and Amazon S3 with AWS Glue data lakes.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1042,9 +1033,9 @@ Cloud.</p>
 <p>Before you launch the Quick Start, your account must be configured as specified below. Otherwise, deployment might fail.</p>
 </div>
 <div class="sect3">
-<h4 id="_resource_limits">Resource Limits</h4>
+<h4 id="_resource_limits">Resource limits</h4>
 <div class="paragraph">
-<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to do this if an existing deployment uses these resources, and you might exceed the default quotas with this deployment. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see the <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
+<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to request increases if your existing deployment currently uses these resources, and this Quick Start deployment could result in exceeding the default quotas. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see the <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1098,9 +1089,9 @@ Cloud.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_supported_regions">Supported Regions</h4>
+<h4 id="_supported_regions">Supported regions</h4>
 <div class="paragraph">
-<p>The following regions are currently supported by this Quick Start Reference Architecture.</p>
+<p>The following regions are currently supported by this Quick Start.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1173,14 +1164,14 @@ Cloud.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Certain regions are available on an opt-in basis. Please refer to the AWS Documentaiton on <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing Regions</a> for more information.
+Certain regions are available on an opt-in basis. Refer to the AWS Documentation on <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing Regions</a> for more information.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_ec2_key_pairs">EC2 Key Pairs</h4>
+<h4 id="_ec2_key_pairs">EC2 key pairs</h4>
 <div class="paragraph">
 <p>Make sure that at least one <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html" target="_blank" rel="noopener">Amazon EC2 key pair</a> exists in your AWS account in the Region where you plan to deploy the Quick Start. Make note of the key pair name. You need it during deployment. To create a key pair, follow the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html" target="_blank" rel="noopener">instructions in the AWS documentation</a>.</p>
 </div>
@@ -1189,7 +1180,7 @@ Certain regions are available on an opt-in basis. Please refer to the AWS Docume
 </div>
 </div>
 <div class="sect3">
-<h4 id="_iam_permissions">IAM Permissions</h4>
+<h4 id="_iam_permissions">IAM permissions</h4>
 <div class="paragraph">
 <p>Before launching the Quick Start, you must log in to the AWS Management Console with <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html" target="_blank" rel="noopener">IAM permissions</a> for the resources and actions the templates deploy.</p>
 </div>
@@ -1208,10 +1199,10 @@ Certain regions are available on an opt-in basis. Please refer to the AWS Docume
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy ETL into a new VPC (end-to-end deployment)</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys ETL into this new VPC.</p>
+<p><strong>Deploy ETL to a new VPC (end-to-end deployment)</strong>. Builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys ETL to this new VPC.</p>
 </li>
 <li>
-<p><strong>Deploy ETL into an existing VPC</strong>. This option provisions ETL in your existing AWS infrastructure.</p>
+<p><strong>Deploy ETL to an existing VPC</strong>. Provisions ETL in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
@@ -1223,7 +1214,7 @@ Certain regions are available on an opt-in basis. Please refer to the AWS Docume
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deployment_steps">Deployment Steps</h2>
+<h2 id="_deployment_steps">Deployment steps</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_sign_in_to_your_aws_account">Sign in to your AWS account</h3>
@@ -1249,14 +1240,14 @@ Certain regions are available on an opt-in basis. Please refer to the AWS Docume
 <p>Sign in to your AWS account.</p>
 </li>
 <li>
-<p><a href="https://aws.amazon.com/marketplace/pp/B07NM5J1PB?qid=1594311874425&amp;sr=0-1&amp;ref_=srh_res_product_title">Open the page for the ETL AMI in AWS Marketplace</a>, and then choose <strong>Continue to Subscribe</strong>.</p>
+<p>Open the page for the ETL AMI in <a href="https://aws.amazon.com/marketplace/pp/B07NM5J1PB?qid=1594311874425&amp;sr=0-1&amp;ref_=srh_res_product_title">AWS Marketplace</a>, and then choose <strong>Continue to Subscribe</strong>.</p>
 </li>
 <li>
 <p>Review the terms and conditions for software usage, and then choose <strong>Accept Terms</strong>.<br>
-A confirmation page loads, and an email confirmation is sent to the account owner. For detailed subscription instructions, see the <a href="https://aws.amazon.com/marketplace/help/200799470" target="_blank" rel="noopener">AWS Marketplace documentation</a>.</p>
+A confirmation page loads, and an email notification is sent to the account owner. For detailed subscription instructions, see the <a href="https://aws.amazon.com/marketplace/help/200799470" target="_blank" rel="noopener">AWS Marketplace documentation</a>.</p>
 </li>
 <li>
-<p>When the subscription process is complete, exit out of AWS Marketplace without further action. <strong>Do not</strong> provision the software from AWS Marketplace—the Quick Start deploys the AMI for you.</p>
+<p>When the subscription process is complete, close AWS Marketplace. <strong>Do not</strong> provision the software from AWS Marketplace. The Quick Start deploys the AMI for you.</p>
 </li>
 </ol>
 </div>
@@ -1278,7 +1269,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">deployment options</a> earlier in this guide.</p>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help choosing an option, see the deployment options that are described above.</p>
 </li>
 </ol>
 </div>
@@ -1288,10 +1279,10 @@ You are responsible for the cost of the AWS services used while running this Qui
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy ETL into a new VPC on AWS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy ETL to a new VPC on AWS</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy ETL into an existing VPC on AWS</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy ETL to an existing VPC on AWS</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1302,13 +1293,13 @@ You are responsible for the cost of the AWS services used while running this Qui
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-If you’re deploying ETL into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances, and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables, to allow the instances to download packages and software without exposing them to the internet.
+If you’re deploying ETL into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances, and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables to allow the instances to download packages and software without exposing them to the internet.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Also, make sure that the domain name option in the DHCP options is configured as explained in the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">Amazon VPC documentation</a>. You provide your VPC settings when you launch the Quick Start.</p>
+<p>Also, make sure that the domain name option in the DHCP options is configured, as explained in the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">Amazon VPC documentation</a>. You must provide your VPC settings when you launch the Quick Start.</p>
 </div>
 <div class="paragraph">
 <p>Each deployment takes about 30 minutes to complete.</p>
@@ -1316,7 +1307,7 @@ If you’re deploying ETL into an existing VPC, make sure that your VPC has two 
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for ETL will be built. The template is launched in the us-east-1 Region by default.</p>
+<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for ETL is built. The template is launched in the us-east-1 Region by default.</p>
 </li>
 </ol>
 </div>
@@ -1672,7 +1663,7 @@ forward slashes (/).</p></td>
 <h2 id="_test_the_deployment">Test the deployment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once the stack has been successfully created, the <strong>Outputs</strong> tab shows the IP address of the Etleap instance, as well as the email and password you can use to log in.</p>
+<p>After the stack has been successfully created, the <strong>Outputs</strong> tab shows the IP address of the Etleap instance, as well as the email and password that you can use to log in.</p>
 </div>
 </div>
 </div>
@@ -1680,7 +1671,7 @@ forward slashes (/).</p></td>
 <h2 id="best-practices-for-using-etleap-on-aws">Best practices for using Etleap on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once logged in, the onboarding guide will help you get started with Etleap. For additional guidance and best practices, use the in-application link to the product documentation.</p>
+<p>Once logged in, the onboarding guide can help you get started with Etleap. For additional guidance and best practices, use the in-application link to the product documentation.</p>
 </div>
 </div>
 </div>
@@ -1688,7 +1679,7 @@ forward slashes (/).</p></td>
 <h2 id="security">Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap is accessed via HTTPS only, and it is recommended that you restrict the IP range in the <em>Etleap App</em> EC2 Security Group for port 443 to just the IP addresses that you will use to access Etleap. Alternatively, you may launch the Etleap EC2 instance in a private subnet.</p>
+<p>Etleap is accessed via HTTPS only. You should restrict the IP range in the <em>Etleap App</em> EC2 Security Group for port 443 to just the IP addresses that you use to access Etleap. Alternatively, you can launch the Etleap EC2 instance in a private subnet.</p>
 </div>
 </div>
 </div>
@@ -1696,7 +1687,7 @@ forward slashes (/).</p></td>
 <h2 id="support">Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap’s support team is standing by to assist you in configuring connections and operating your pipelines. Please reach out via in-application instant message or email <a href="mailto:support@etleap.com">support@etleap.com</a>.</p>
+<p>Etleap’s support team is standing by to assist you in configuring connections and operating your pipelines. Contact them through the in-application instant message option or send an email to <a href="mailto:support@etleap.com">support@etleap.com</a>.</p>
 </div>
 </div>
 </div>
@@ -1707,7 +1698,7 @@ forward slashes (/).</p></td>
 <p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console on the <strong>Options</strong> page.) With this setting, the stack’s state is retained, and the instance is left running so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1716,7 +1707,7 @@ forward slashes (/).</p></td>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Please make sure to delete the stack when you finish troubleshooting.
+When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Delete the stack when you finish troubleshooting.
 </td>
 </tr>
 </table>
@@ -1728,7 +1719,7 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <p><strong>Q.</strong> I encountered a size limitation error when I deployed the AWS CloudFormation templates.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
+<p><strong>A.</strong> Launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
 </div>
 </div>
 </div>
@@ -1743,18 +1734,13 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <div class="sect1">
 <h2 id="_quick_start_reference_deployments">Quick Start reference deployments</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>AWS Quick Start home page<br>
-<a href="https://aws.amazon.com/quickstart/" class="bare">https://aws.amazon.com/quickstart/</a></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>See the <a href="https://aws.amazon.com/quickstart/">AWS Quick Start home page</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_github_repository">GitHub Repository</h2>
+<h2 id="_github_repository">GitHub repository</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can visit our <a href="https://github.com/aws-quickstart/quickstart-etleap-etl" target="_blank" rel="noopener">GitHub repository</a> to download
@@ -1777,9 +1763,15 @@ and to share your customizations with others.</p>
 </div>
 </div>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-07-13 19:08:54 UTC
+Last updated 2020-07-14 20:43:56 UTC
 </div>
 </div>
 </body>

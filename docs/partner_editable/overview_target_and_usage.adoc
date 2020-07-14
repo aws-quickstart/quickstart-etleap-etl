@@ -2,6 +2,4 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-[[_Toc481076926]]This Quick Start is for users who want to run Etleap within an existing or new VPC in their own AWS account.
-
-[[_Toc535566609]]Please know that we may share who uses AWS Quick Starts with the AWS Partner Network (APN) Partner that collaborated with AWS on the content of the Quick Start.
+This Quick Start is for users who want to run ETL within an existing or new virtual private cloud (VPC) in their own AWS account. When deploying to a new VPC, the Quick Start builds a new AWS environment with the VPC and all required infrastructure components.

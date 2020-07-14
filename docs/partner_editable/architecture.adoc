@@ -1,16 +1,16 @@
-Deploying this Quick Start for a new virtual private cloud (VPC) with
-*default parameters* builds the following Etleap ETL environment in the
+Deploying this Quick Start for a new VPC with
+default parameters builds the following Etleap ETL environment in the
 AWS Cloud.
 
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
 [#architecture1]
-.Quick Start architecture for _{partner-product-name}_ on AWS
+.Quick Start architecture for {partner-product-name} on AWS
 [link=images/architecture_diagram.png]
-image::../images/image1.png[image,width=643,height=489]
+image::../images/architecture_diagram.png[Architectural diagram,width=643,height=489]
 
 As shown in Figure 1, the Quick Start sets up the following:
 
-* A VPC configured with public and a private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*
+* A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.footnote:note[The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.]
 * An Amazon S3 bucket used by Etleap to store extracted and transformed data.
 * Four AWS Identity and Access Management (IAM) roles:
 
@@ -22,12 +22,10 @@ As shown in Figure 1, the Quick Start sets up the following:
 * Two AWS Key Management Service (KMS) keys in different AWS regions used to encrypt secrets within Etleap.
 * In the public subnets:
 
-** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.*
+** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.footnote:note[]
 ** An Amazon EC2 instance running Etleap.
 
 * In the private subnets:
 
-** An Amazon RDS MySQL database used by Etleap to store metadata.
+** An Amazon Relational Database Service (Amazon RDS) MySQL database used by Etleap to store metadata.
 ** An Amazon EMR cluster used by Etleap to run extractions and transformations.
-
-\* The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.
