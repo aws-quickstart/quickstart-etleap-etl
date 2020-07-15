@@ -10,7 +10,6 @@ ifdef::marketplace_subscription[]
 
 This Quick Start requires a subscription to the AMI for {partner-product-name} in AWS Marketplace.
 
-. Sign in to your AWS account.
 . Open the page for the {partner-product-name} AMI in {marketplace_listing_url}[AWS Marketplace], and then choose *Continue to Subscribe*.
 . Review the terms and conditions for software usage, and then choose *Accept Terms*. +
   A confirmation page loads, and an email notification is sent to the account owner. For detailed subscription instructions, see the https://aws.amazon.com/marketplace/help/200799470[AWS Marketplace documentation^].
@@ -23,7 +22,7 @@ endif::marketplace_subscription[]
 
 NOTE: You are responsible for the cost of the AWS services used while running this Quick Start reference deployment. There is no additional cost for using this Quick Start. For full details, see the pricing pages for each AWS service used by this Quick Start. Prices are subject to change.
 
-. Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help choosing an option, see the deployment options that are described above. 
+. Choose one of the following options to launch the AWS CloudFormation template. For help choosing an option, see the deployment options that are described above. 
 
 [cols=",]
 |===
