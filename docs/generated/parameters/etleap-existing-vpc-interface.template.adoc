@@ -15,8 +15,8 @@
 |===
 |Parameter label (name) |Default Value|Description|Key pair name
 (`KeyPairName`)|`**__Requires Input__**`|EC2 key pair name.|Deployment ID
-(`DeploymentId`)|``|The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.|Deployment secret - optional
-(`UserSpecifiedDeploymentSecret`)|``|The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
+(`DeploymentId`)|`__Optional__`|The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.|Deployment secret - optional
+(`UserSpecifiedDeploymentSecret`)|`__Optional__`|The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
 The ARN of the secret that is used in the deployment will be present in the outputs.
 If you have previously launched Etleap with the same deployment ID, please make sure you use the same secret key.
 |First name
