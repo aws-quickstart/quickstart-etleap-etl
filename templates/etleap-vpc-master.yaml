@@ -54,83 +54,83 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      app: ami-0663b3a088cdc6978
+      app: ami-046ce6172c7e24849
       mpapp: ami-039c1ccd1b77386ad
       nat: ami-00a9d4a05375b2763
     us-east-2:
-      app: ami-05bafb5b64dd7b7d1
+      app: ami-0194773bd7104417a
       mpapp: ami-025efaa4b727d0607
       nat: ami-00d1f8201864cc10c
     us-west-1:
-      app: ami-04ef41a71243d6d54
+      app: ami-032f4192931a1c23f
       mpapp: ami-08f54ac5ecc1d06a2
       nat: ami-097ad469381034fa2
     us-west-2:
-      app: ami-0f636ea6e7e30b0db
+      app: ami-0cf9d311b117030b7
       mpapp: ami-0cadbaa3ea2314081
       nat: ami-0b840e8a1ce4cdf15
     ca-central-1:
-      app: ami-03608a63d782bff29
+      app: ami-097b8e0d43500bd06
       mpapp: ami-06af9d994f087da1d
       nat: ami-0b32354309da5bba5
     eu-central-1:
-      app: ami-011caa7a158c7791d
+      app: ami-0ac913959ff30400c
       mpapp: ami-095335b26e0c90e50
       nat: ami-06a5303d47fbd8c60
     eu-west-1:
-      app: ami-01a996c82949822f2
+      app: ami-0633df61713ea6119
       mpapp: ami-0ef993d4852ba2af0
       nat: ami-024107e3e3217a248
     eu-west-2:
-      app: ami-0e6d4659993ac5786
+      app: ami-00db26c4cdbec93d0
       mpapp: ami-063ff5c69f26e9741
       nat: ami-0ca65a55561666293
     eu-west-3:
-      app: ami-05c72b84feda9c803
+      app: ami-0ebeff36b04510220
       mpapp: ami-0c940e189e77ff4c1
       nat: ami-0641e4dfc1427f114
     ap-southeast-1:
-      app: ami-0ca35f3f680b62f93
+      app: ami-01f4049e941146fc9
       mpapp: ami-0052afd32691a33ae
       nat: ami-01514bb1776d5c018
     ap-southeast-2:
-      app: ami-05156127010c4b60c
+      app: ami-09d065be6f29ec7d7
       mpapp: ami-0151db4f4715bf4e8
       nat: ami-062c04ec46aecd204
     ap-south-1:
-      app: ami-070dffe379b3d6bc8
+      app: ami-06b83cb780a5e823d
       mpapp: ami-00d28db51fd7d5221
       nat: ami-00b3aa8a93dd09c13
     ap-northeast-1:
-      app: ami-07b3aac8f19ea38c6
+      app: ami-095e269441d22a46c
       mpapp: ami-0a8a2772fd2a47d2b
       nat: ami-00d29e4cb217ae06b
     ap-northeast-2:
-      app: ami-0dcd0bd24ace6e511
+      app: ami-0fa6fff39c74374d4
       mpapp: ami-01b597bf1591b9676
       nat: ami-0d98591cbf9ef1ffd
     sa-east-1:
-      app: ami-0faa5e4293b88e902
+      app: ami-04f6cf3691a0d28a9
       mpapp: ami-0899953081bebdc04
       nat: ami-057f5d52ff7ae75ae
     eu-north-1:
-      app: ami-04463ada2c7044d20
+      app: ami-00ee487a093fa4fa5
       mpapp: ami-0b12307dbcbaf7da6
       nat: ami-28d15f56
     ap-east-1:
-      app: ami-0df29b3c5e16ac0bd
+      app: ami-08af4a57142aec602
       mpapp: ami-01901a73a22b53a96
       nat: ami-0c6ed192398e5636d
     me-south-1:
-      app: ami-09dcfa43226a086c0
+      app: ami-0972910afef7e8402
       mpapp: ami-04de93c7f1c75f57d
       nat: ami-0e9909371b18e2ec7
     af-south-1:
-      app: ami-02bf681ddf00bb1f5
+      app: ami-0aa5333d54d32b817
       mpapp: ami-08806b5a836d14831
       nat: ami-0f7b1b7c2c50e3202
     eu-south-1:
-      app: ami-0772a7c9a9225e5fc
+      app: ami-0f13f20b4aedf40e5
       mpapp: ami-02ebc44cb1930489c
       nat: ami-08df23351dd5626cf
 
