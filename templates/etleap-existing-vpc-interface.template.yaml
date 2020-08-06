@@ -50,7 +50,7 @@ Metadata:
       DeploymentId:
         default: Deployment ID
       UserSpecifiedDeploymentSecret:
-        default: Deployment secret - optional
+        default: Deployment secret (optional)
       KeyPairName:
         default: Key pair name
       FirstName:
@@ -80,9 +80,9 @@ Parameters:
   UserSpecifiedDeploymentSecret:
     Type: String
     Description: |
-      The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
-      The ARN of the secret that is used in the deployment will be present in the outputs.
-      If you have previously launched Etleap with the same deployment ID, please make sure you use the same secret key.
+      The ARN of the secret used to communicate with Etleap. If left blank, one is generated for you.
+      The ARN of the secret used in the deployment will be present in the outputs.
+      If you have previously launched Etleap with the same deployment ID, use the same secret key.
     AllowedPattern: "^(arn:aws:secretsmanager:[a-z1-9-]+:\\d{12}:secret:[A-Za-z0-9-_+=.@\\/]+)?$"
     ConstraintDescription: "The deployment secret must be a valid Secrets Manager ARN."
     Default: ""
@@ -103,10 +103,10 @@ Parameters:
     Description: "Your email address."
     MaxLength: 255
     AllowedPattern: "^[\\x20-\\x45]?[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$"
-    ConstraintDescription: "Please provide a valid email address. At most 255 characters."
+    ConstraintDescription: "Provide a valid email address. Maximum length is 255 characters."
   SetupPassword:
     Type: String
-    Description: "Your initial login password. You will be asked to change this when you log in for the first time."
+    Description: "Your initial login password. You will be asked to change this password when you log in for the first time."
     MinLength: 8
     MaxLength: 64
     ConstraintDescription: "Must be between 8 and 64 characters long."
@@ -141,7 +141,7 @@ Parameters:
     Description: "CIDR block allowed remote access to the environment."
     Default: "0.0.0.0/0"
     AllowedPattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$"
-    ConstraintDescription: "Please provide a valid CIDR block."
+    ConstraintDescription: "Provide a valid CIDR block."
   QSS3BucketName:
     Type: String
     Description: |

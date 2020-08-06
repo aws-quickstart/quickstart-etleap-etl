@@ -787,8 +787,8 @@ table p {
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
 <li><a href="#_subscribe_to_the_etl_ami">Subscribe to the ETL AMI</a></li>
 <li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
-<li><a href="#_launch_into_a_new_vpc">Launch into a new VPC</a></li>
 <li><a href="#_launch_into_an_existing_vpc">Launch into an existing VPC</a></li>
+<li><a href="#_launch_into_a_new_vpc">Launch into a new VPC</a></li>
 </ul>
 </li>
 <li><a href="#_test_the_deployment">Test the deployment</a></li>
@@ -852,7 +852,7 @@ report bugs, or submit feature ideas for this Quick Start.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Please know that we may share who uses AWS
+Amazon may share who uses AWS
 Quick Starts with the AWS Partner Network (APN) Partner that
 collaborated with AWS on the content of the Quick Start.
 </td>
@@ -865,7 +865,7 @@ collaborated with AWS on the content of the Quick Start.
 <h2 id="_etl_on_aws">ETL on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap is an extract, transform, and load (ETL) service for building data warehouses using Amazon Redshift and data lakes using Amazon Simple Storage Service (Amazon S3) and AWS Glue. Using Etleap on the AWS Cloud, you can:</p>
+<p>ETL is an extract, transform, and load (ETL) service for building data warehouses using Amazon Redshift and data lakes using Amazon Simple Storage Service (Amazon S3) and AWS Glue. Using Etleap on the AWS Cloud, you can:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -873,10 +873,10 @@ collaborated with AWS on the content of the Quick Start.
 <p>Extract from any source, including databases, applications, files, and event streams. Even legacy on-premises sources can be integrated with no extra effort.</p>
 </li>
 <li>
-<p>Transform and preview your data using Etleap’s interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster, which is included with this Quick Start.</p>
+<p>Transform and preview your data using the Etleap interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster, which is included with this Quick Start.</p>
 </li>
 <li>
-<p>Load to an Amazon Redshift data warehouse or an Amazon S3 with AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.</p>
+<p>Load to an Amazon Redshift data warehouse or Amazon S3 with AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.</p>
 </li>
 <li>
 <p>Model your data with SQL queries for unification and performance, and let Etleap maintain dependencies and orchestration.</p>
@@ -934,7 +934,7 @@ AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram.png"><img src="images/image1.png" alt="Architectural diagram" width="643" height="489"></a>
+<a class="image" href="images/architecture_diagram.png"><img src="images/architecture_diagram.png" alt="Architectural diagram" width="643" height="489"></a>
 </div>
 <div class="title">Figure 1. Quick Start architecture for ETL on AWS</div>
 </div>
@@ -1200,7 +1200,7 @@ Certain regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy ETL to a new VPC (end-to-end deployment)</strong>. Builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys ETL to this new VPC.</p>
+<p><strong>Deploy ETL to a new VPC (end-to-end deployment)</strong>. Builds a new AWS environment that consists of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys ETL to this new VPC.</p>
 </li>
 <li>
 <p><strong>Deploy ETL to an existing VPC</strong>. Provisions ETL in your existing AWS infrastructure.</p>
@@ -1340,147 +1340,9 @@ Region', and 'Quick Start S3 key prefix', unless you are customizing the Quick S
 </div>
 </div>
 <div class="sect2">
-<h3 id="_launch_into_a_new_vpc">Launch into a new VPC</h3>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Network configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR block 1
-(<code>VpcCidrBlock1</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The first octet of the CIDR block of the desired VPC&#8217;s address space.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR block 2
-(<code>VpcCidrBlock2</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The second octet of the CIDR block of the desired VPC&#8217;s address space.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed IP CIDR block
-(<code>AllowedIPCidr</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block allowed remote access to the environment.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Etleap configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Key pair name
-(<code>KeyPairName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EC2 key pair name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment ID
-(<code>DeploymentId</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><em>Optional</em></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment secret - optional
-(<code>UserSpecifiedDeploymentSecret</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><em>Optional</em></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
-The ARN of the secret that is used in the deployment will be present in the outputs.
-If you have previously launched Etleap with the same deployment ID, please make sure you use the same secret key.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">First name
-(<code>FirstName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Your first name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Last name
-(<code>LastName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Your last name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Email address
-(<code>Email</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Your email address.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Etleap initial login password
-(<code>SetupPassword</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Your initial login password. You will be asked to change this when you log in for the first time.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. AWS Quick Start configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
-(<code>QSS3BucketName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket name for the Quick Start assets. Quick Start bucket name
-can include numbers, lowercase letters, uppercase letters, and hyphens (-).
-It cannot start or end with a hyphen (-).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket region
-(<code>QSS3BucketRegion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
-(<code>QSS3KeyPrefix</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-etleap-etl/</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix for the Quick Start assets. Quick Start key prefix
-can include numbers, lowercase letters, uppercase letters, hyphens (-), and
-forward slashes (/).</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
 <h3 id="_launch_into_an_existing_vpc">Launch into an existing VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. VPC configuration</caption>
+<caption class="title">Table 1. VPC configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -1533,6 +1395,144 @@ forward slashes (/).</p></td>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Etleap configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key pair name
+(<code>KeyPairName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EC2 key pair name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment ID
+(<code>DeploymentId</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><em>Optional</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment secret (optional)
+(<code>UserSpecifiedDeploymentSecret</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><em>Optional</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ARN of the secret used to communicate with Etleap. If left blank, one is generated for you.
+The ARN of the secret used in the deployment will be present in the outputs.
+If you have previously launched Etleap with the same deployment ID, use the same secret key.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First name
+(<code>FirstName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your first name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Last name
+(<code>LastName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your last name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Email address
+(<code>Email</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your email address.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Etleap initial login password
+(<code>SetupPassword</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires Input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your initial login password. You will be asked to change this password when you log in for the first time.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. AWS Quick Start configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
+(<code>QSS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket name for the Quick Start assets. Quick Start bucket name
+can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+It cannot start or end with a hyphen (-).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket region
+(<code>QSS3BucketRegion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-etleap-etl/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix for the Quick Start assets. Quick Start key prefix
+can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+forward slashes (/).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_launch_into_a_new_vpc">Launch into a new VPC</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Network configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR block 1
+(<code>VpcCidrBlock1</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The first octet of the CIDR block of the desired VPC&#8217;s address space.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR block 2
+(<code>VpcCidrBlock2</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The second octet of the CIDR block of the desired VPC&#8217;s address space.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed IP CIDR block
+(<code>AllowedIPCidr</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block allowed remote access to the environment.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. Etleap configuration</caption>
 <colgroup>
 <col style="width: 16%;">
@@ -1560,12 +1560,12 @@ forward slashes (/).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the deployment, provided by Etleap. Leave blank if purchased through AWS Marketplace.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment secret - optional
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deployment secret (optional)
 (<code>UserSpecifiedDeploymentSecret</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><em>Optional</em></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The ARN of the secret used to communicate with Etleap. If left blank, one will be generated for you.
-The ARN of the secret that is used in the deployment will be present in the outputs.
-If you have previously launched Etleap with the same deployment ID, please make sure you use the same secret key.</p></td>
+The ARN of the secret used in the deployment will be present in the outputs.
+If you have previously launched Etleap with the same deployment ID, use the same secret key.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">First name
@@ -1680,7 +1680,7 @@ forward slashes (/).</p></td>
 <h2 id="security">Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap is accessed via HTTPS only. You should restrict the IP range in the <em>Etleap App</em> EC2 Security Group for port 443 to just the IP addresses that you use to access Etleap. Alternatively, you can launch the Etleap EC2 instance in a private subnet.</p>
+<p>Etleap is accessed through HTTPS only. You should restrict the IP range in the <em>Etleap App</em> EC2 Security Group for port 443 to only the IP addresses that you use to access Etleap. Alternatively, you can launch the Etleap EC2 instance in a private subnet.</p>
 </div>
 </div>
 </div>
@@ -1688,7 +1688,7 @@ forward slashes (/).</p></td>
 <h2 id="support">Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Etleap’s support team is standing by to assist you in configuring connections and operating your pipelines. Contact them through the in-application instant message option or send an email to <a href="mailto:support@etleap.com">support@etleap.com</a>.</p>
+<p>The Etleap support team is standing by to assist you in configuring connections and operating your pipelines. Contact them through the in-application instant message option or send an email to <a href="mailto:support@etleap.com">support@etleap.com</a>.</p>
 </div>
 </div>
 </div>
@@ -1772,7 +1772,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-07-31 17:27:11 UTC
+Last updated 2020-08-06 22:04:26 UTC
 </div>
 </div>
 </body>

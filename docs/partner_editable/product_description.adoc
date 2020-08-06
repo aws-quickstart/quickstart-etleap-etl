@@ -2,10 +2,10 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Etleap is an extract, transform, and load (ETL) service for building data warehouses using Amazon Redshift and data lakes using Amazon Simple Storage Service (Amazon S3) and AWS Glue. Using Etleap on the AWS Cloud, you can:
+{partner-product-name} is an extract, transform, and load (ETL) service for building data warehouses using Amazon Redshift and data lakes using Amazon Simple Storage Service (Amazon S3) and AWS Glue. Using {partner-company-name} on the AWS Cloud, you can:
 
 * Extract from any source, including databases, applications, files, and event streams. Even legacy on-premises sources can be integrated with no extra effort.
-* Transform and preview your data using Etleap’s interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster, which is included with this Quick Start.
-* Load to an Amazon Redshift data warehouse or an Amazon S3 with AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.
-* Model your data with SQL queries for unification and performance, and let Etleap maintain dependencies and orchestration.
+* Transform and preview your data using the {partner-company-name} interactive data wrangler, without writing any code. Transformations are run at scale on an auto-scaling Amazon EMR cluster, which is included with this Quick Start.
+* Load to an Amazon Redshift data warehouse or Amazon S3 with AWS Glue data lake for immediate analysis, on-demand access, and long-term archival.
+* Model your data with SQL queries for unification and performance, and let {partner-company-name} maintain dependencies and orchestration.
 * Operate your pipelines without headaches. Automatic detection and guided resolution of schema changes and performance issues keep your data repository available, reliable, and fast.
