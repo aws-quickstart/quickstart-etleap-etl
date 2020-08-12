@@ -1,11 +1,11 @@
 :quickstart-project-name: quickstart-etleap-etl
-:partner-product-name: ETL
+:partner-product-name: Etleap ETL
 :partner-company-name: Etleap
-:doc-month: July
+:doc-month: August
 :doc-year: 2020
-:partner-contributors: Caius Brindescu and Christian Romming - {partner-company-name}
-:quickstart-contributors: Dave May, Quick Start Team
-:deployment_time: 30 minutes
+:partner-contributors: Caius Brindescu and Archie Menzies, {partner-company-name}
+:quickstart-contributors: Dave May, Quick Start team
+:deployment_time: 20 minutes
 :default_deployment_region: us-east-1
 // Uncomment these two attributes if you are leveraging
 // - an AWS Marketplace listing.

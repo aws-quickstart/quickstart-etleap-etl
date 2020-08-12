@@ -2,7 +2,7 @@
 //Should any sections not be applicable, remove them
 
 == Test the deployment
-After the stack has been successfully created, the *Outputs* tab shows the IP address of the {partner-company-name} instance, as well as the email and password that you can use to log in.
+After the stack has been successfully created, the *Outputs* tab shows the IP address of the {partner-company-name} instance as well as the email and password that you can use to log in.
 
 [[best-practices-for-using-etleap-on-aws]]
 == Best practices for using Etleap on AWS
@@ -12,7 +12,7 @@ Once logged in, the onboarding guide can help you get started with {partner-comp
 [[security]]
 == Security
 
-{partner-company-name} is accessed through HTTPS only. You should restrict the IP range in the _Etleap App_ EC2 Security Group for port 443 to only the IP addresses that you use to access {partner-company-name}. Alternatively, you can launch the {partner-company-name} EC2 instance in a private subnet.
+{partner-company-name} is accessed through HTTPS only. You should restrict the IP range in the Etleap EC2 security group for port 443 to only the IP addresses that you use to access {partner-company-name}. Alternatively, you can launch the {partner-company-name} EC2 instance in a private subnet.
 
 [[support]]
 == Support
