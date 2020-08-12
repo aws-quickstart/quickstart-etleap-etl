@@ -5,8 +5,8 @@ AWS Cloud.
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
 [#architecture1]
 .Quick Start architecture for {partner-product-name} on AWS
-[link=images/etleap-architecture-diagram-single.png]
-image::../images/etleap-architecture-diagram-single.png[Architectural diagram,width=643,height=489]
+[link=images/etleap-architecture-diagram.png]
+image::../images/etleap-architecture-diagram.png[Architectural diagram,width=643,height=489]
 
 As shown in figure 1, the Quick Start sets up the following:
 
