@@ -109,19 +109,19 @@ Resources:
       BootstrapActions:
       - Name: "Configure Fair Scheduler"
         ScriptBootstrapAction: 
-          Path: "s3://datadanze-emr/conf-hadoop2/download-fair-scheduler-config.sh"
+          Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/download-fair-scheduler-config.sh"
       - Name: "Add Etleap-provided JARs"
         ScriptBootstrapAction:
-          Path: "s3://datadanze-emr/conf-hadoop2/add-app-provided-libs.sh"
+          Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/add-app-provided-libs.sh"
       - Name: "Replace the Java keystore with Etleap's"
         ScriptBootstrapAction:
-          Path: "s3://datadanze-emr/conf-hadoop2/install-etleap-keystore.sh"
+          Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/install-etleap-keystore.sh"
       - Name: "Set TCP keepalive"
         ScriptBootstrapAction:
-          Path: "s3://datadanze-emr/conf-hadoop2/set-tcp-keepalive.sh"
+          Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/set-tcp-keepalive.sh"
       - Name: "Copy HDFS init script"
         ScriptBootstrapAction:
-          Path: "s3://datadanze-emr/conf-hadoop2/copy-hdfs-init.sh"
+          Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/copy-hdfs-init.sh"
   
   EMRTask:
     Type: "AWS::EMR::InstanceGroupConfig"

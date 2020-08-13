@@ -157,7 +157,7 @@ Resources:
   EtleapNATInstance:
     Type: "AWS::EC2::Instance"
     Properties:
-      InstanceType: "m4.large"
+      InstanceType: "m5n.large"
       SourceDestCheck: false
       ImageId: 
         Ref: NatAMI
