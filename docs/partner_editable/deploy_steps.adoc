@@ -11,7 +11,7 @@ ifdef::marketplace_subscription[]
 This Quick Start requires a subscription to the AMI for {partner-product-name} in AWS Marketplace or a license provided by Etleap. If Etleap has provided you with a deployment ID, you can skip ahead and launch the Quick Start in the next section.  
 
 . Sign in to your AWS account.
-. Open the page for the {partner-product-name} AMI in {https://aws.amazon.com/marketplace/pp/B08C4KVR5Z}[AWS Marketplace], and then choose *Continue to Subscribe*.
+. Open the page for the {partner-product-name} AMI in https://aws.amazon.com/marketplace/pp/B08C4KVR5Z[AWS Marketplace], and then choose *Continue to Subscribe*.
 . Review the terms and conditions for software usage, and then choose *Accept Terms*. +
   A confirmation page loads, and an email notification is sent to the account owner. For detailed subscription instructions, see the https://aws.amazon.com/marketplace/help/200799470[AWS Marketplace documentation^].
 
