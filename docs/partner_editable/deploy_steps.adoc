@@ -8,10 +8,10 @@
 ifdef::marketplace_subscription[]
 === Subscribe to the {partner-product-name} AMI
 
-This Quick Start requires a subscription to the AMI for {partner-product-name} in AWS Marketplace.
+This Quick Start requires a subscription to the AMI for {partner-product-name} in AWS Marketplace or a license provided by Etleap. If Etleap has provided you with a deployment ID, you can skip ahead and launch the Quick Start in the next section.  
 
 . Sign in to your AWS account.
-. Open the page for the {partner-product-name} AMI in {marketplace_listing_url}[AWS Marketplace], and then choose *Continue to Subscribe*.
+. Open the page for the {partner-product-name} AMI in {https://aws.amazon.com/marketplace/pp/B08C4KVR5Z}[AWS Marketplace], and then choose *Continue to Subscribe*.
 . Review the terms and conditions for software usage, and then choose *Accept Terms*. +
   A confirmation page loads, and an email notification is sent to the account owner. For detailed subscription instructions, see the https://aws.amazon.com/marketplace/help/200799470[AWS Marketplace documentation^].
 
@@ -27,8 +27,8 @@ NOTE: You are responsible for the cost of the AWS services used while running th
 
 [cols=",]
 |===
-|http://qs_launch_link[Deploy {partner-product-name} to a new VPC on AWS^] 
-|http://qs_launch_link[Deploy {partner-product-name} to an existing VPC on AWS^]
+|https://fwd.aws/eXbre[Deploy {partner-product-name} to a new VPC on AWS^] 
+|https://fwd.aws/YzagR[Deploy {partner-product-name} to an existing VPC on AWS^]
 |===
 
 WARNING: If you’re deploying {partner-product-name} into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances, and that the subnets aren’t shared. This Quick Start doesn’t support https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html[shared subnets^]. These subnets require https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html[NAT gateways^] in their route tables to allow the instances to download packages and software without exposing them to the internet.
