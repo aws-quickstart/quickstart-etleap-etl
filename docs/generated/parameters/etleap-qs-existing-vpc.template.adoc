@@ -1,0 +1,62 @@
+
+.VPC configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|The VPC where to deploy Etleap in.
+(`UserSpecifiedVPCId`)|`**__Requires input__**`|NO_DESCRIPTION|The first public subnet
+(`PublicSubnetA`)|`**__Requires input__**`|NO_DESCRIPTION|The second public subnet
+(`PublicSubnetB`)|`**__Requires input__**`|NO_DESCRIPTION|The first private subnet
+(`PrivateSubnetA`)|`**__Requires input__**`|NO_DESCRIPTION|A second private subnet
+(`PrivateSubnetB`)|`**__Requires input__**`|NO_DESCRIPTION
+|===
+.Network configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Allowed IP CIDR block
+(`AllowedIPCidr`)|`0.0.0.0/0`|CIDR block allowed remote access to the environment.
+|===
+.Etleap configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Etleap Deployment ID
+(`DeploymentId`)|`__Optional__`|The Deployment ID provided by Etleap. If purchased through AWS Marketplace, leave this blank.
+|Deployment secret (optional)
+(`UserSpecifiedDeploymentSecret`)|`__Optional__`|The ARN of the secret used to communicate with Etleap. If left blank, one
+is generated for you.
+
+The ARN of the secret that is used in the deployment will be present in
+the outputs.
+
+If you have previously launched Etleap with the same deployment ID, please
+make sure you use the same secret key.
+|First name
+(`FirstName`)|`**__Requires input__**`|Your first name.|Last name
+(`LastName`)|`**__Requires input__**`|Your last name.|Email address
+(`Email`)|`**__Requires input__**`|Your email address. You may opt-in to register your deployment with Etleap. If you do, Etleap requires that your email domain is globally unique and that it isn't a personal email domain (such as gmail.com or yahoo.com), so use your company email address.|Etleap initial login password
+(`SetupPassword`)|`**__Requires input__**`|Your initial login password. You will be asked to change this password when you log
+in for the first time.
+|SSL certificate ARN
+(`SSLCertificateArn`)|`**__Requires input__**`|The SSL Certificate ID used with the load balancer. Can be left blank if deploying with Single Availability.
+|===
+.Instance configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|EC2 instance type
+(`AppInstanceType`)|`**__Requires input__**`|The EC2 instance type.|Key pair name
+(`KeyPairName`)|`**__Requires input__**`|EC2 key pair name.|Availability Mode
+(`Availability`)|`Single Availability`|Availability Mode
+|===
+.AWS Quick Start configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the Quick Start assets. Quick Start bucket name
+can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+It cannot start or end with a hyphen (-).
+|Quick Start S3 bucket region
+(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`**__Requires input__**`|S3 key prefix for the Quick Start assets. Quick Start key prefix
+can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+forward slashes (/).
+
+|===

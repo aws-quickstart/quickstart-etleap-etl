@@ -1,5 +1,5 @@
 Deploying this Quick Start for a new VPC with
-default parameters builds the following {partner-company-name} {partner-product-name} environment in the
+default parameters builds the following {partner-product-name} environment in the
 AWS Cloud.
 
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
@@ -16,6 +16,30 @@ As shown in figure 1, the Quick Start sets up the following:
 ** An Amazon EC2 instance running {partner-company-name}.
 * In the private subnets:
 ** An Amazon Relational Database Service (Amazon RDS) MySQL database used by {partner-company-name} to store metadata.
+** An Amazon EMR cluster used by {partner-company-name} to run extractions and transformations.
+* An Amazon S3 bucket used by {partner-company-name} to store extracted and transformed data.
+* One AWS Key Management Service (AWS KMS) key used to encrypt secrets within {partner-company-name}.
+* Four AWS Identity and Access Management (IAM) roles:
+** One attached to the {partner-company-name} Amazon EC2 instance.
+** One attached to the Amazon EMR cluster nodes.
+** One used by Amazon EMR for provisioning and service-level actions (see https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role.html[EMR Role^]).
+** One used by Amazon EMR for auto scaling (see https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-role-automatic-scaling.html[Auto Scaling Role^]).
+
+If the "Availability" parameter is set to "High Availability", the following {partner-product-name} architecture is deployed.
+
+[#architecture1]
+.Highly available Quick Start architecture for {partner-product-name} on AWS
+[link=images/etleap-architecture-diagram-ha.png]
+image::../images/etleap-architecture-diagram-ha.png[Architectural diagram,width=643,height=489]
+
+As shown in figure 2, the Quick Start sets up the following:
+
+* A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.footnote:note[The template that deploys the Quick Start into an existing VPC skips this component and prompts you for your existing VPC configuration.]
+* In the public subnets:
+** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnets.footnote:note[]
+** Two Amazon EC2 instances running {partner-product-name}.
+* In the private subnets:
+** An Amazon Relational Database Service (Amazon RDS) MySQL database replicated across two Availability Zones used by {partner-company-name} to store metadata.
 ** An Amazon EMR cluster used by {partner-company-name} to run extractions and transformations.
 * An Amazon S3 bucket used by {partner-company-name} to store extracted and transformed data.
 * One AWS Key Management Service (AWS KMS) key used to encrypt secrets within {partner-company-name}.
