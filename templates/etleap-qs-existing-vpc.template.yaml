@@ -265,7 +265,7 @@ Resources:
         SSLCertificateArn: !Ref SSLCertificateArn
       TemplateURL: 
         !Sub
-          - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/etleap-master.yaml"
+          - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/etleap-main.yaml"
           - S3Region: !If [UsingDefaultBucket, !Ref "AWS::Region", !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub "${QSS3BucketName}-${AWS::Region}", !Ref QSS3BucketName]
 

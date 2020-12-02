@@ -209,7 +209,7 @@ Resources:
         DeploymentId: !Ref "AWS::AccountId"
         Availability: !Ref Availability
       TemplateURL: !Sub
-          - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/quickstart-etleap-etl/templates/etleap-master.yaml"
+          - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/quickstart-etleap-etl/templates/etleap-main.yaml"
           - S3Region: !Ref "AWS::Region"
             S3Bucket: !Sub "aws-quickstart-${AWS::Region}"
 

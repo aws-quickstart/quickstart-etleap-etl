@@ -1238,7 +1238,7 @@ Resources:
     Type: "AWS::EMR::Cluster"
     Properties:
       Name: "Etleap EMR"
-      ReleaseLabel: "emr-5.20.0"
+      ReleaseLabel: "emr-5.22.0"
       VisibleToAllUsers: true
       Applications:
         - Name: Hadoop
