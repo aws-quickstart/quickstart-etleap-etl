@@ -21,7 +21,7 @@
 |Parameter label (name) |Default value|Description|Etleap Deployment ID
 (`DeploymentId`)|`__Optional__`|The Deployment ID provided by Etleap. If purchased through AWS Marketplace, leave this blank.
 |Deployment secret (optional)
-(`UserSpecifiedDeploymentSecret`)|`__Optional__`|The ARN of the secret used to communicate with Etleap. If left blank, one
+(`UserSpecifiedDeploymentSecret`)|`**__Blank string__**`|The ARN of the secret used to communicate with Etleap. If left blank, one
 is generated for you.
 
 The ARN of the secret that is used in the deployment will be present in
@@ -36,7 +36,7 @@ make sure you use the same secret key.
 (`SetupPassword`)|`**__Requires input__**`|Your initial login password. You will be asked to change this password when you log
 in for the first time.
 |SSL certificate ARN
-(`SSLCertificateArn`)|`**__Requires input__**`|The SSL Certificate ID used with the load balancer. Can be left blank if deploying with Single Availability.
+(`SSLCertificateArn`)|`**__Blank string__**`|The SSL Certificate ID used with the load balancer. Can be left blank if deploying with Single Availability.
 |===
 .Instance configuration
 [width="100%",cols="16%,11%,73%",options="header",]

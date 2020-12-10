@@ -1,6 +1,6 @@
 
-=== Launch into a new VPC
-include::etleap-qs-new-vpc.template.adoc[]
-
 === Launch into an existing VPC
 include::etleap-qs-existing-vpc.template.adoc[]
+
+=== Launch into a new VPC
+include::etleap-qs-new-vpc.template.adoc[]

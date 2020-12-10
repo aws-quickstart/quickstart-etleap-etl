@@ -27,7 +27,7 @@ As shown in figure 1, the Quick Start sets up the following:
 
 If the "Availability" parameter is set to "High Availability", the following {partner-product-name} architecture is deployed.
 
-[#architecture1]
+[#architecture2]
 .Highly available Quick Start architecture for {partner-product-name} on AWS
 [link=images/etleap-architecture-diagram-ha.png]
 image::../images/etleap-architecture-diagram-ha.png[Architectural diagram,width=643,height=489]
