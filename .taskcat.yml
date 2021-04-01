@@ -1,0 +1,58 @@
+
+project:
+  name: quickstart-etleap-etl
+  owner: quickstart-eng@amazon.com
+  regions:
+    - us-east-1
+    - us-east-2
+    - us-west-1
+#    - us-west-2
+    - ca-central-1
+    - eu-central-1
+    - eu-west-1
+    - eu-west-2
+    - eu-west-3
+    - ap-southeast-1
+    - ap-southeast-2
+    - ap-south-1
+    - ap-northeast-1
+    - ap-northeast-2
+    - sa-east-1
+    - eu-north-1
+    - ap-east-1
+    - me-south-1
+    - af-south-1
+    - eu-south-1
+  s3_regional_buckets: true
+  template: templates/etleap-qs-new-vpc.template.yaml
+tests:
+  etleap-no-ha:
+    parameters:
+      AllowedIPCidr: 0.0.0.0/0
+      DeploymentId: test
+      FirstName: test
+      LastName: test
+      Email: test@test.com
+      SetupPassword: $[taskcat_genpass_32]
+      KeyPairName: $[taskcat_getkeypair]
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+    regions:
+    - us-east-1
+    template: templates/etleap-qs-new-vpc.template.yaml
+  etleap-ha:
+    parameters:
+      AllowedIPCidr: 0.0.0.0/0
+      Availability: 'High Availability'
+      DeploymentId: test
+      FirstName: test
+      LastName: test
+      Email: test@test.com
+      SetupPassword: $[taskcat_genpass_32]
+      KeyPairName: $[taskcat_getkeypair]
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      SSLCertificateArn: override
+    regions:
+    - us-east-2
+    template: templates/etleap-qs-new-vpc.template.yaml

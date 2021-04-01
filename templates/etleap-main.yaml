@@ -1,0 +1,1408 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "Creates all Etleap deployment resources."
+
+Parameters:
+  UserSpecifiedDeploymentSecret:
+    Type: String
+  VpcCidrBlock1:
+    Type: Number
+    Default: 0
+  VpcCidrBlock2:
+    Type: Number
+    Default: 0
+  FirstName:
+    Type: String
+  LastName:
+    Type: String
+  Email:
+    Type: String
+  SetupPassword:
+    Type: String
+  UserSpecifiedVPCId:
+    Type: String
+    Default: ""
+  PublicSubnetA:
+    Type: String
+    Default: ""
+  PublicSubnetB:
+    Type: String
+    Default: ""
+  PrivateSubnetA:
+    Type: String
+    Default: ""
+  PrivateSubnetB:
+    Type: String
+    Default: ""
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+  AllowedIPCidr:
+    Type: String
+  AppAmi:
+    Type: String
+  AppInstanceType:
+    Type: String
+  DeploymentId:
+    Type: String
+  Availability:
+    Type: String
+  SSLCertificateArn:
+    Type: String
+
+Mappings:
+  NatRegionMap:
+    us-east-1:
+      nat: ami-00a9d4a05375b2763
+    us-east-2:
+      nat: ami-00d1f8201864cc10c
+    us-west-1:
+      nat: ami-097ad469381034fa2
+    us-west-2:
+      nat: ami-0b840e8a1ce4cdf15
+    ca-central-1:
+      nat: ami-0b32354309da5bba5
+    eu-central-1:
+      nat: ami-06a5303d47fbd8c60
+    eu-west-1:
+      nat: ami-024107e3e3217a248
+    eu-west-2:
+      nat: ami-0ca65a55561666293
+    eu-west-3:
+      nat: ami-0641e4dfc1427f114
+    ap-southeast-1:
+      nat: ami-01514bb1776d5c018
+    ap-southeast-2:
+      nat: ami-062c04ec46aecd204
+    ap-south-1:
+      nat: ami-00b3aa8a93dd09c13
+    ap-northeast-1:
+      nat: ami-00d29e4cb217ae06b
+    ap-northeast-2:
+      nat: ami-0d98591cbf9ef1ffd
+    sa-east-1:
+      nat: ami-057f5d52ff7ae75ae
+    eu-north-1:
+      nat: ami-28d15f56
+    ap-east-1:
+      nat: ami-0c6ed192398e5636d
+    me-south-1:
+      nat: ami-0e9909371b18e2ec7
+    af-south-1:
+      nat: ami-0f7b1b7c2c50e3202
+    eu-south-1:
+      nat: ami-08df23351dd5626cf
+    us-gov-east-1:
+      nat: ami-509b7421
+    us-gov-west-1:
+      nat: ami-d30e32b2
+
+Conditions:
+  CreateVPC: !Equals [!Ref UserSpecifiedVPCId, ""]
+  GenerateNewDeploymentSecret: !Equals [!Ref UserSpecifiedDeploymentSecret, ""]
+  MarketplaceDeployment: !Equals [!Ref DeploymentId, !Ref "AWS::AccountId"]
+  HAMode: !Equals [!Ref Availability, "High Availability"]
+#  SingleMode: !Equals [!Ref Availability, "Single Availability"]
+
+Resources:
+  EtleapVPC:
+    Type: "AWS::EC2::VPC"
+    Condition: CreateVPC
+    Properties:
+      CidrBlock: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.0.0/22"
+      EnableDnsHostnames: true
+      Tags:
+        - Key: "Name"
+          Value: "Etleap VPC"
+
+  EtleapInternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Condition: CreateVPC
+    Properties:
+      Tags:
+        - Key: Name
+          Value: "Etleap IG"
+
+  EtleapGatewayAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Condition: CreateVPC
+    Properties:
+      InternetGatewayId: !Ref EtleapInternetGateway
+      VpcId: !Ref EtleapVPC
+
+  EtleapPrivateRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Condition: CreateVPC
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "Etleap Private"
+      VpcId: !Ref EtleapVPC
+
+  EtleapPublicRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Condition: CreateVPC
+    Properties:
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: Name
+          Value: "Etleap Public"
+
+  EtleapPrivateRoute:
+    Type: "AWS::EC2::Route"
+    Condition: CreateVPC
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      InstanceId: !Ref EtleapNATInstance
+      RouteTableId: !Ref EtleapPrivateRouteTable
+
+  EtleapPublicRoute:
+    Type: "AWS::EC2::Route"
+    Condition: CreateVPC
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref EtleapInternetGateway
+      RouteTableId: !Ref EtleapPublicRouteTable
+
+  EtleapPrivateSubnetA:
+    Type: "AWS::EC2::Subnet"
+    Condition: CreateVPC
+    Properties:
+      AvailabilityZone: !Sub "${AWS::Region}a"
+      CidrBlock: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.0.0/24"
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: "Name"
+          Value: "Etleap A Private"
+
+  EtleapPrivateSubnetB:
+    Type: "AWS::EC2::Subnet"
+    Condition: CreateVPC
+    Properties:
+      AvailabilityZone: !Sub "${AWS::Region}b"
+      CidrBlock: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.1.0/24"
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: "Name"
+          Value: "Etleap B Private"
+
+  EtleapPublicSubnetA:
+    Type: "AWS::EC2::Subnet"
+    Condition: CreateVPC
+    Properties:
+      AvailabilityZone: !Sub "${AWS::Region}a"
+      CidrBlock: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.2.0/24"
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: Name
+          Value: "Etleap A Public"
+
+  EtleapPublicSubnetB:
+    Type: "AWS::EC2::Subnet"
+    Condition: CreateVPC
+    Properties:
+      AvailabilityZone: !Sub "${AWS::Region}b"
+      CidrBlock: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.3.0/24"
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: Name
+          Value: "Etleap B Public"
+
+  EtleapPublicSubnetARouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Condition: CreateVPC
+    Properties:
+      RouteTableId: !Ref EtleapPublicRouteTable
+      SubnetId: !Ref EtleapPublicSubnetA
+
+  EtleapPublicSubnetBRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Condition: CreateVPC
+    Properties:
+      RouteTableId: !Ref EtleapPublicRouteTable
+      SubnetId: !Ref EtleapPublicSubnetB
+
+  EtleapPrivateSubnetARouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Condition: CreateVPC
+    Properties:
+      RouteTableId: !Ref EtleapPrivateRouteTable
+      SubnetId: !Ref EtleapPrivateSubnetA
+
+  EtleapPrivateSubnetBRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Condition: CreateVPC
+    Properties:
+      RouteTableId: !Ref EtleapPrivateRouteTable
+      SubnetId: !Ref EtleapPrivateSubnetB
+
+  EtleapNATEgress:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    Condition: CreateVPC
+    Properties:
+      FromPort: 0
+      ToPort: 65535
+      IpProtocol: tcp
+      GroupId: !Ref EtleapNATSecurityGroup
+      CidrIp: "0.0.0.0/0"
+
+  EtleapNATIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Condition: CreateVPC
+    Properties:
+      FromPort: 0
+      ToPort: 65535
+      IpProtocol: tcp
+      GroupId: !Ref EtleapNATSecurityGroup
+      CidrIp: !Sub "${VpcCidrBlock1}.${VpcCidrBlock2}.1.0/24"
+
+  EtleapNATSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Condition: CreateVPC
+    Properties:
+      GroupDescription: "NAT Security Group"
+      GroupName: !Join ["-", ["Etleap-NAT", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      VpcId: !Ref EtleapVPC
+      Tags:
+        - Key: Name
+          Value: "Etleap NAT"
+
+  EtleapNATInstance:
+    Type: "AWS::EC2::Instance"
+    Condition: CreateVPC
+    Properties:
+      InstanceType: "m5n.large"
+      SourceDestCheck: false
+      ImageId: !FindInMap [NatRegionMap, !Ref "AWS::Region", "nat"]
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          AssociatePublicIpAddress: true
+          SubnetId: !Ref EtleapPublicSubnetB
+          GroupSet:
+            - Ref: EtleapNATSecurityGroup
+      Tags:
+        - Key: Name
+          Value: "Etleap NAT"
+
+  EtleapInternalSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Etleap Internal Security Group"
+      GroupName: !Join ["-", ["Etleap-Internal", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      VpcId: !If [CreateVPC, !Ref EtleapVPC, !Ref UserSpecifiedVPCId]
+      Tags:
+        - Key: Name
+          Value: "Etleap Internal"
+
+  EtleapInternalEgressSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    Properties:
+      CidrIp: "0.0.0.0/0"
+      Description: String
+      FromPort: 0
+      ToPort: 65535
+      GroupId: !Ref EtleapInternalSecurityGroup
+      IpProtocol: tcp
+
+  EtleapInternalIngressSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      FromPort: 0
+      ToPort: 65535
+      GroupId: !Ref EtleapInternalSecurityGroup
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref EtleapInternalSecurityGroup
+
+  EtleapDBRootPassword:
+    Type: "AWS::SecretsManager::Secret"
+    Properties:
+      Name: !Join ["-", [EtleapDBRootPassword, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      GenerateSecretString:
+        ExcludePunctuation: true
+        PasswordLength: 20
+
+  EtleapDB:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      AllocatedStorage: "500"
+      AllowMajorVersionUpgrade: false
+      AutoMinorVersionUpgrade: false
+      BackupRetentionPeriod: 7
+      DBInstanceClass: "db.m5.large"
+      DBInstanceIdentifier: !Join ["-", [etleap-db, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      DBParameterGroupName: !Ref "EtleapDBParameterGroup"
+      DBSubnetGroupName: !Ref "EtleapDBSubnetGroup"
+      DeletionProtection: false
+      EnablePerformanceInsights: true
+      Engine: "mysql"
+      EngineVersion: "5.6.41"
+      MasterUsername: root
+      MasterUserPassword: !Sub
+        - "{{resolve:secretsmanager:${EtleapDBRootPassword}}}"
+        - EtleapDBRootPassword: !Join ["-", [EtleapDBRootPassword, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      StorageEncrypted: true
+      StorageType: "gp2"
+      MultiAZ: !If [HAMode, true, false]
+      VPCSecurityGroups:
+        - Ref: EtleapDBSecurityGroup
+
+  EtleapDBParameterGroup:
+    Type: "AWS::RDS::DBParameterGroup"
+    Properties:
+      Description: "MySQL 5.6 with Etleap modifications"
+      Family: "mysql5.6"
+      Parameters:
+        character-set-client-handshake: "0"
+        collation_server: latin1_swedish_ci
+        character_set_server: latin1
+        log_bin_trust_function_creators: "1"
+        binlog_format: ROW
+        innodb_lock_wait_timeout: "250"
+        general_log: "0"
+        long_query_time: "0.05"
+        slow_query_log: "1"
+        log_warnings: "2"
+        log_output: file
+        binlog_checksum: none
+
+  EtleapDBSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: "Etleap DB Subnet Group"
+      DBSubnetGroupName: !Join ["-", ["Etleap-DB", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      SubnetIds:
+        - !If [CreateVPC, !Ref EtleapPrivateSubnetA, !Ref PrivateSubnetA]
+        - !If [CreateVPC, !Ref EtleapPrivateSubnetB, !Ref PrivateSubnetB]
+
+  EtleapDBSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Etleap DB"
+      GroupName: !Join ["-", ["Etleap-DB", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      Tags:
+        - Key: Name
+          Value: "Etleap DB"
+      VpcId: !If [CreateVPC, !Ref EtleapVPC, !Ref UserSpecifiedVPCId]
+
+  EtleapAppRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Effect": "Allow",
+              "Sid": ""
+            }
+          ]
+        }
+
+  EtleapEMRRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+
+  EtleapEMRInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - Ref: EtleapEMRRole
+
+  EtleapEMRDefaultRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "elasticmapreduce.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+
+  EtleapEMRAutoscalingDefaultRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforAutoScalingRole"
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "elasticmapreduce.amazonaws.com",
+                  "application-autoscaling.amazonaws.com"
+                ]
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+
+  EtleapAssumeAnyRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "Etleap_assume_any_role"
+      PolicyDocument: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Resource": [
+                "*"
+              ]
+            }
+          ]
+        }
+      Roles:
+        - Ref: EtleapAppRole
+        - Ref: EtleapEMRRole
+        - Ref: EtleapEMRDefaultRole
+
+  EtleapDescribeEC2Policy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: EtleapEC2Describe
+      PolicyDocument: |
+        {
+           "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "ec2:DescribeInstances",
+                        "ec2:DescribeVpcs",
+                        "autoscaling:DescribeAutoScalingInstances"
+                    ],
+                    "Resource": [
+                        "*"
+                    ]
+                }
+            ]
+        }
+      Roles:
+        - Ref: EtleapAppRole
+
+  EtleapSecretsPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: EtleapEC2Secrets
+      PolicyDocument: |
+        {
+           "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "secretsmanager:GetSecretValue"
+                    ],
+                    "Resource": [
+                        "*"
+                    ]
+                }
+            ]
+        }
+      Roles:
+        - Ref: EtleapAppRole
+
+  EMRProfilePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "EtleapEMRProfilePolicy"
+      PolicyDocument: |
+        {
+            "Version": "2012-10-17",
+            "Statement": [{
+                "Effect": "Allow",
+                "Resource": "*",
+                "Action": [
+                    "cloudwatch:*",
+                    "ec2:Describe*",
+                    "elasticmapreduce:Describe*",
+                    "elasticmapreduce:ListBootstrapActions",
+                    "elasticmapreduce:ListClusters",
+                    "elasticmapreduce:ListInstanceGroups",
+                    "elasticmapreduce:ListInstances",
+                    "elasticmapreduce:ListSteps",
+                    "rds:Describe*",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:PutObject",
+                    "s3:DeleteObject",
+                    "ec2:CreateVolume",
+                    "ec2:AttachVolume",
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:DeleteVolume",
+                    "ec2:CreateTags"
+                ]
+            }]
+        }
+      Roles:
+        - Ref: EtleapEMRRole
+
+  EtleapKMS:
+    Type: "AWS::KMS::Key"
+    Properties:
+      Description: "Key used for encrypting Etleap secrets in the Virginia region."
+      Enabled: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: "etleap-kms-policy"
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: "kms:*"
+            Resource: "*"
+          - Sid: Allow use of the key
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:role/${EtleapAppRole}"
+            Action:
+              - "kms:Encrypt"
+              - "kms:Decrypt"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:DescribeKey"
+            Resource: "*"
+          - Sid: Allow attachment of persistent resources
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:role/${EtleapAppRole}"
+            Action:
+              - "kms:CreateGrant"
+              - "kms:ListGrants"
+              - "kms:RevokeGrant"
+            Resource: "*"
+            Condition:
+              Bool:
+                "kms:GrantIsForAWSResource": "true"
+      Tags:
+        - Key: Name
+          Value: "Etleap KMS"
+
+  EtleapAppSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Etleap App Security Group"
+      GroupName: !Join ["-", ["Etleap-App", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      VpcId: !If [CreateVPC, !Ref EtleapVPC, !Ref UserSpecifiedVPCId]
+      Tags:
+        - Key: Name
+          Value: Etleap App Security Group
+
+  EtleapAppEgressSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    Properties:
+      CidrIp: "0.0.0.0/0"
+      FromPort: 0
+      GroupId: !Ref EtleapAppSecurityGroup
+      IpProtocol: tcp
+      ToPort: 65535
+
+  EtleapAppDbSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      FromPort: 3306
+      ToPort: 3306
+      GroupId: !Ref EtleapDBSecurityGroup
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref EtleapAppSecurityGroup
+
+  EtleapSSHSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      CidrIp: !Ref AllowedIPCidr
+      FromPort: 22
+      ToPort: 22
+      GroupId: !Ref EtleapAppSecurityGroup
+      IpProtocol: tcp
+
+  EtleapSSLSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      CidrIp: !Ref AllowedIPCidr
+      FromPort: 443
+      ToPort: 443
+      GroupId: !Ref EtleapAppSecurityGroup
+      IpProtocol: tcp
+
+  EtleapYSJESRestSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      CidrIp: !Ref AllowedIPCidr
+      FromPort: 8080
+      ToPort: 8080
+      GroupId: !Ref EtleapAppSecurityGroup
+      IpProtocol: tcp
+
+  EtleapYSJESHealthCheckSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      CidrIp: !Ref AllowedIPCidr
+      FromPort: 8081
+      ToPort: 8081
+      GroupId: !Ref EtleapAppSecurityGroup
+      IpProtocol: tcp
+
+  EtleapInternalAppSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      GroupId: !Ref EtleapAppSecurityGroup
+      SourceSecurityGroupId: !Ref EtleapInternalSecurityGroup
+
+  EtleapAppInternalSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      GroupId: !Ref EtleapInternalSecurityGroup
+      SourceSecurityGroupId: !Ref EtleapAppSecurityGroup
+  
+  EtleapAppAppSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Condition: HAMode
+    Properties:
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      GroupId: !Ref EtleapAppSecurityGroup
+      SourceSecurityGroupId: !Ref EtleapAppSecurityGroup
+
+  EtleapAppANetworkInterface:
+    Type: "AWS::EC2::NetworkInterface"
+    Condition: HAMode
+    Properties:
+      SubnetId: !If [CreateVPC, !Ref EtleapPublicSubnetA, !Ref PublicSubnetA]
+      GroupSet:
+        - Ref: EtleapAppSecurityGroup
+
+  EtleapAppBNetworkInterface:
+    Type: "AWS::EC2::NetworkInterface"
+    Properties:
+      SubnetId: !If [CreateVPC, !Ref EtleapPublicSubnetB, !Ref PublicSubnetB]
+      GroupSet:
+        - Ref: EtleapAppSecurityGroup
+
+  EtleapDBPassword:
+    Type: "AWS::SecretsManager::Secret"
+    Properties:
+      Name: !Join ["-", [EtleapDBPassword, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      GenerateSecretString:
+        ExcludePunctuation: true
+        PasswordLength: 20
+
+  EtleapDBSalesforcePassword:
+    Type: "AWS::SecretsManager::Secret"
+    Properties:
+      Name: !Join ["-", [EtleapDBSalesforcePassword, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      GenerateSecretString:
+        ExcludePunctuation: true
+        PasswordLength: 20
+
+  EtleapAdminPassword:
+    Type: "AWS::SecretsManager::Secret"
+    Properties:
+      Name: !Join ["-", [EtleapAdminPassword, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      GenerateSecretString:
+        ExcludePunctuation: true
+        PasswordLength: 20
+
+  GeneratedDeploymentSecret:
+    Condition: GenerateNewDeploymentSecret
+    Type: "AWS::SecretsManager::Secret"
+    DeletionPolicy: "Retain"
+    Properties:
+      Name: !Join ["-", [EtleapDeploymentSecret, !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+      GenerateSecretString:
+        ExcludePunctuation: true
+        PasswordLength: 40
+  
+  EtleapLoadBalancer:
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    Condition: HAMode
+    Properties:
+      IpAddressType: ipv4
+      Scheme: internet-facing
+      Subnets:
+      - !If [CreateVPC, !Ref EtleapPublicSubnetA, !Ref PublicSubnetA]
+      - !If [CreateVPC, !Ref EtleapPublicSubnetB, !Ref PublicSubnetB]
+      SecurityGroups:
+      - Ref: EtleapAppSecurityGroup
+      Type: application
+
+  EtleapAppTargetGroup:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Condition: HAMode
+    Properties:
+      TargetType: instance
+      VpcId: !If [CreateVPC, !Ref EtleapVPC, !Ref UserSpecifiedVPCId]
+      Port: 443
+      Protocol: HTTPS
+      Targets:
+      - Id: !Ref EtleapAppB
+        Port: 443
+      - Id: !Ref EtleapAppA
+        Port: 443
+      Matcher:
+        HttpCode: "200,400"
+  
+  EtleapAppLoadBalancerListener:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Condition: HAMode
+    Properties:
+      Certificates:
+      - CertificateArn: !Ref SSLCertificateArn
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref EtleapAppTargetGroup
+      LoadBalancerArn: !Ref EtleapLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+  
+  EtleapAppA:
+    Type: "AWS::EC2::Instance"
+    Condition: HAMode
+    Properties:
+      IamInstanceProfile: !Ref EtleapAppInstanceProfile
+      ImageId: !Ref AppAmi
+      InstanceType: !Ref AppInstanceType
+      KeyName: !Ref KeyPairName
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          NetworkInterfaceId: !Ref EtleapAppANetworkInterface
+      Tags:
+        - Key: Name
+          Value: "Etleap App A"
+      UserData: !Base64
+        "Fn::Sub":
+          - |
+            #cloud-config
+            # -*- YAML -*-
+            apt_upgrade: true
+            locale: en_US.UTF-8
+
+            write_files:
+            - path: /home/ubuntu/.aws/config
+              content: |
+                [default]
+                region = ${AWS::Region}
+              owner: ubuntu:ubuntu
+            - path: /root/.aws/config
+              content: |
+                [default]
+                region = ${AWS::Region}
+            - path: /home/ubuntu/ssl_certificate/ssl.pem
+              content: |
+                -----BEGIN CERTIFICATE-----
+                MIIDEjCCAfoCCQCwU84b/lc2gjANBgkqhkiG9w0BAQsFADBLMQswCQYDVQQGEwJV
+                UzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzEP
+                MA0GA1UECgwGRXRsZWFwMB4XDTIwMDYwNTAxMDEzNVoXDTMwMDYwMzAxMDEzNVow
+                SzELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
+                biBGcmFuY2lzY28xDzANBgNVBAoMBkV0bGVhcDCCASIwDQYJKoZIhvcNAQEBBQAD
+                ggEPADCCAQoCggEBANbRtGKkwUY0LJ32u1p/lm0FcUnzCFP00o8Y3X10rB9j0kPF
+                daKd+o1dIAfrD9FPjG/cZCRY0A2jGhngp/zQ9j8zMF0mUJX1q2Ub8yD6dDUL9KRW
+                T3Zhr5h35T4FFcF6W/iiFT0L11xdSP6nsQFsKXan1ewp/RRCzXIx2mOyiQ7EkeaR
+                k8meEQXWygk4y1ivfMrZdJQa8EnzMHrnPnSr/8HZB0DAjhXi+H4XcOgsVD8Fjbcj
+                0BRk12YP278lcygekVYndr9YTvphKBBlTeVPqSrWzFIJV7e/9PR9NGyOga2A6dQ2
+                ZGvvLZ0KK9ivAh7Hxatk+TjxFtvqWKKORAR19c8CAwEAATANBgkqhkiG9w0BAQsF
+                AAOCAQEABaGzI5PVlrIkG/RVY/5IQYKN6Wm09FhDA6ocFCDKW0C9lf28GSximxEW
+                KTH/DB/FyTK19y7UygM4Qw9eknFT7oNlZABd4fvBjBHwxfNNd53IOaEVn56As8jv
+                g2jExvgv7/i62K2KE1zXI0P8SoOLyWXiYlo2uvyLzv21dNBWRAyOd9cpNndq7YsK
+                qqWW0jUyL1dpytJ4Czw8O+1UiAP3oK61k1hepZMPtrdKUZIbhGNnoCiZrfkb715Q
+                c04YhqhUzaCmm+Ui1KxJfGrheLNind0YV3udwdMAHVQninKvTCC0Rp5SwrwvC72x
+                IdrMAzUSKCQ8sKWUzcq8ddquBFP9nA==
+                -----END CERTIFICATE-----
+              owner: ubuntu:ubuntu
+            - path: /home/ubuntu/ssl_certificate/ssl.key
+              content: |
+                -----BEGIN PRIVATE KEY-----
+                MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDW0bRipMFGNCyd
+                9rtaf5ZtBXFJ8whT9NKPGN19dKwfY9JDxXWinfqNXSAH6w/RT4xv3GQkWNANoxoZ
+                4Kf80PY/MzBdJlCV9atlG/Mg+nQ1C/SkVk92Ya+Yd+U+BRXBelv4ohU9C9dcXUj+
+                p7EBbCl2p9XsKf0UQs1yMdpjsokOxJHmkZPJnhEF1soJOMtYr3zK2XSUGvBJ8zB6
+                5z50q//B2QdAwI4V4vh+F3DoLFQ/BY23I9AUZNdmD9u/JXMoHpFWJ3a/WE76YSgQ
+                ZU3lT6kq1sxSCVe3v/T0fTRsjoGtgOnUNmRr7y2dCivYrwIex8WrZPk48Rbb6lii
+                jkQEdfXPAgMBAAECggEAX6WnZ3RsCdIZO4wsBzNfytLtijuHrboINmaf18gnCyLq
+                7/nvUqR8dozMQjpLJKsCoJvEitpwaGICsRryMQLpYWJtWkxA/UQROEeljT12mFfm
+                aXV0lAUSphRcIa0p7qeIY7/nLPMkxJ9UbO5FRZjfLVG1Uh2v7WGBECNaVaGcnNHf
+                entkz6Q2XW2OwGeMNlPXc4d00xPYjqHkF6uzlyBDRT4PwYLZEz4A0pL/YIB2PpOj
+                ySGRwBOV/y/gDgn6+RhUXYi7U8e6RGMsqBAFiIYL81ApLuQKqIsQXHHV8UfdTxNJ
+                hsdvgNU7UC7eSENOv6Gx0eUmj6OILZHfZTkgaUwMIQKBgQD/j3oDN1nDFfZ2LXoz
+                W5EPx5AoNdgLvqKmEVaTRTq3VjoSXk+EvbJKmpPy9Xif8tjfYm+tDd1lhgzRw3U2
+                Yg/YTYCmgkM2qLiQbhtbMLnltmteKYKKidOYRjer81vXwHJ7+giyCB68kxtATN4e
+                wpo3o5lYzALjorVV/k0mYwCMiwKBgQDXMEojpxFVHdkhzJl13MNYWU7FB3i6V1sv
+                VWOC1tXNTXb6OOv6YHHqaxPhcJSNmVOT7z1Azfu5KKMRTPrezdGvHxDs+ZKaXvIs
+                FQAZcVn2L8cWb3AVQRqSKoPWJBUpz/6Y24nmZQk4UR3sJn1pY0NDrEh7XGIuuNIT
+                dXiwHukQTQKBgQDp7hXL1+DMmNAQATT4yfqRLSWiCReIOKp9xSUwjZBfvghORBIZ
+                +eK4M6L2JQiTsSIf6OU8zZI5mmklofsrGrxSTS9UO6z23Z6EZqWX5ZRk14SUnv6l
+                feA4ZR4UwiDx73FcVtWa0aABEc9CHpq8IXo1MAXwqF6ErK2815kbaEhaXQKBgQDW
+                ANg6jLPYCk8eJfOYG2zKOEb1+3A9IRM2B51nSXBnNFrWjjVgUvn3P3YOBYA3MfzE
+                anBoOnHUum0xj3UOj3GwzxxuD+WUUEhXPqtSoj/tbaZ40WqOOKjMJCvokwnZA1kX
+                e32w+1on/8PaToz6ehUy/+s1g7LA9F03rOPRg2wVIQKBgQDiuph/Mb5HyMH2YTUV
+                5Jnv6Ro2RDo0wD+MIvGCeDSKjhMP/CTxdE6AyTveE5fQXOdAs7RSgoD34HA/xnnC
+                sfD5NsU9GcHfSYi1FVsusujN30lqrdjDKfXO4/spKtn9/2K1BwWTduw2NE4BPCE5
+                W5MvOAw81WlRadDCGWeTxGEF/Q==
+                -----END PRIVATE KEY-----
+              owner: ubuntu:ubuntu
+            - path: /home/ubuntu/db-init.sh
+              content: |
+                #!/bin/bash -e
+
+                DB_ROOT_PASSWORD=$1
+                ETLEAP_DB_PASSWORD=$2
+                SALESFORCE_DB_PASSWORD=$3
+                ORG_NAME=$4
+
+                mysql -h$ETLEAP_RDS_HOSTNAME -uroot -p$DB_ROOT_PASSWORD <<EOF
+                CREATE DATABASE IF NOT EXISTS etleap;
+                GRANT ALL PRIVILEGES ON etleap.* TO 'etleap-prod'@'%' IDENTIFIED BY "$ETLEAP_DB_PASSWORD";
+
+                CREATE DATABASE IF NOT EXISTS salesforce;
+                USE salesforce;
+                GRANT ALL PRIVILEGES ON salesforce.* TO 'salesforce'@'%' IDENTIFIED BY "$SALESFORCE_DB_PASSWORD";
+                CREATE TABLE IF NOT EXISTS jobs (id bigint(20) NOT NULL AUTO_INCREMENT,
+                  user_hash varchar(64) NOT NULL,
+                  job_id varchar(64) NOT NULL,
+                  first_batch_id varchar(64),
+                  query_hash varchar(64) NOT NULL,
+                  bulk_api_calls int(11) NOT NULL,
+                  failed tinyint(1) NOT NULL DEFAULT 0,
+                  create_date datetime NOT NULL,
+                  PRIMARY KEY (id),
+                  UNIQUE KEY (user_hash, job_id),
+                  INDEX user_hash_create_date (user_hash, create_date)
+                ) ENGINE=InnoDB;
+
+                FLUSH PRIVILEGES;
+
+                EOF
+
+                exit 0
+              owner: ubuntu:ubuntu
+              permissions: "0755"
+            - path: /home/ubuntu/.etleap
+              content: |
+                export CUSTOMER_VPC=1
+                export ETLEAP_DEPLOYMENT_ID=${DeploymentId}
+                export USE_PROD_SECRETS=0
+                export JOB_ROLE=customer_job,monitor
+                export ETLEAP_DB_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapDBPassword} | jq -r .SecretString)"
+                export SALESFORCE_DB_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapDBSalesforcePassword} | jq -r .SecretString)"
+                export ETLEAP_HOSTS_ALLOWED="${PublicHostnameOrIp}"
+                export FRONT_END_HOSTNAME="${PublicHostnameOrIp}"
+                export ETLEAP_FRONT_END_URL="https://${PublicHostnameOrIp}/"
+                export ETLEAP_CORS_ALLOWED_ORIGINS="https://${PublicHostnameOrIp}"
+                export API_HOSTNAME="${PublicHostnameOrIp}"
+                export API_URL="https://$API_HOSTNAME/"
+                export ETLEAP_BASE_URL=$API_URL
+                export ETLEAP_CONF_FILE=/opt/etleap/prod-customervpc.conf
+                export ETLEAP_HTTP_SESSION_DOMAIN="${PublicHostnameOrIp}"
+                export ETLEAP_KMS_KEY_VIRGINIA="${EtleapKMS}"
+                export ETLEAP_SETUP_FIRST_NAME="${FirstName}"
+                export ETLEAP_SETUP_LAST_NAME="${LastName}"
+                export ETLEAP_SETUP_EMAIL="${Email}"
+                export ETLEAP_SETUP_PASSWORD="${EtleapSetupPassword}"
+                export ETLEAP_SETUP_ADMIN_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapAdminPassword} | jq -r .SecretString)"
+                export ETLEAP_SETUP_INTERMEDIATE_BUCKET=${S3IntermediateBucket}
+                export ETLEAP_SETUP_INTERMEDIATE_ROLE_ARN="${S3IntermediateRole}"
+                export ENABLE_YSJES='true'
+                export ETLEAP_DEPLOYMENT_ROLE="customervpc_ha"
+                export ETLEAP_SECRET_APPLICATION_SECRET="$(aws secretsmanager get-secret-value --secret-id ${DeploymentSecret} | jq -r .SecretString)"
+                export ETLEAP_RDS_HOSTNAME="${RDSHostname}"
+                export ETLEAP_EMR_HOSTNAME="${EMRHostname}"
+                export ETLEAP_YSJES_HOSTNAME="${MasterAppPrivateIp}"
+                export ETLEAP_MAIN_APP_IP="${MasterAppPrivateIp}"
+                export MARKETPLACE_DEPLOYMENT="${MarketplaceDeployment}"
+                export ETLEAP_AWS_ACCCOUNT_ID="${AWS::AccountId}"
+              owner: ubuntu:ubuntu
+
+            runcmd:
+            - aws configure set region `curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region`
+            - 'sed -i ''s/"dns": \[".*"\]/"dns": ["169.254.169.253"]/g'' /etc/docker/daemon.json'
+            - service docker restart
+            - . /home/ubuntu/.etleap &&/home/ubuntu/db-init.sh $(aws secretsmanager get-secret-value --secret-id ${RootDBPassword} | jq -r .SecretString) $(aws secretsmanager get-secret-value --secret-id ${EtleapDBPassword} | jq -r .SecretString) $(aws secretsmanager get-secret-value --secret-id ${EtleapDBSalesforcePassword} | jq -r .SecretString) ${DeploymentId}
+            - yes | ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''
+            - cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+            - su ubuntu -c ". /home/ubuntu/.etleap && /home/ubuntu/cron-deploy-customervpc.sh"
+          - DeploymentId: !Ref DeploymentId
+            RootDBPassword: !Ref EtleapDBRootPassword
+            EtleapDBPassword: !Ref EtleapDBPassword
+            EtleapDBSalesforcePassword: !Ref EtleapDBSalesforcePassword
+            EtleapAdminPassword: !Ref EtleapAdminPassword
+            EtleapSetupPassword: !Ref SetupPassword
+            S3IntermediateRole: !GetAtt S3IntermediateRole.Arn
+            DeploymentSecret: !If [GenerateNewDeploymentSecret, !Ref GeneratedDeploymentSecret, !Ref UserSpecifiedDeploymentSecret]
+            RDSHostname: !GetAtt EtleapDB.Endpoint.Address
+            MasterAppPrivateIp: !GetAtt EtleapAppB.PrivateIp
+            EMRHostname: !GetAtt EtleapEMR.MasterPublicDNS
+            PublicHostnameOrIp: !If 
+              - HAMode
+              - !Sub 
+                - "$(echo ${DNS} | tr '[:upper:]' '[:lower:]')"
+                - DNS: !GetAtt EtleapLoadBalancer.DNSName
+              - "$(curl -sS http://169.254.169.254/latest/meta-data/public-ipv4)"
+            MarketplaceDeployment: !If [MarketplaceDeployment, "true", "false"]
+
+  EtleapAppB:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      IamInstanceProfile: !Ref EtleapAppInstanceProfile
+      ImageId: !Ref AppAmi
+      InstanceType: !Ref AppInstanceType
+      KeyName: !Ref KeyPairName
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          NetworkInterfaceId: !Ref EtleapAppBNetworkInterface
+      Tags:
+        - Key: Name
+          Value: "Etleap App B"
+      UserData: !Base64
+        "Fn::Sub":
+          - |
+            #cloud-config
+            # -*- YAML -*-
+            apt_upgrade: true
+            locale: en_US.UTF-8
+
+            write_files:
+            - path: /home/ubuntu/.aws/config
+              content: |
+                [default]
+                region = ${AWS::Region}
+              owner: ubuntu:ubuntu
+            - path: /root/.aws/config
+              content: |
+                [default]
+                region = ${AWS::Region}
+            - path: /home/ubuntu/ssl_certificate/ssl.pem
+              content: |
+                -----BEGIN CERTIFICATE-----
+                MIIDEjCCAfoCCQCwU84b/lc2gjANBgkqhkiG9w0BAQsFADBLMQswCQYDVQQGEwJV
+                UzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzEP
+                MA0GA1UECgwGRXRsZWFwMB4XDTIwMDYwNTAxMDEzNVoXDTMwMDYwMzAxMDEzNVow
+                SzELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNh
+                biBGcmFuY2lzY28xDzANBgNVBAoMBkV0bGVhcDCCASIwDQYJKoZIhvcNAQEBBQAD
+                ggEPADCCAQoCggEBANbRtGKkwUY0LJ32u1p/lm0FcUnzCFP00o8Y3X10rB9j0kPF
+                daKd+o1dIAfrD9FPjG/cZCRY0A2jGhngp/zQ9j8zMF0mUJX1q2Ub8yD6dDUL9KRW
+                T3Zhr5h35T4FFcF6W/iiFT0L11xdSP6nsQFsKXan1ewp/RRCzXIx2mOyiQ7EkeaR
+                k8meEQXWygk4y1ivfMrZdJQa8EnzMHrnPnSr/8HZB0DAjhXi+H4XcOgsVD8Fjbcj
+                0BRk12YP278lcygekVYndr9YTvphKBBlTeVPqSrWzFIJV7e/9PR9NGyOga2A6dQ2
+                ZGvvLZ0KK9ivAh7Hxatk+TjxFtvqWKKORAR19c8CAwEAATANBgkqhkiG9w0BAQsF
+                AAOCAQEABaGzI5PVlrIkG/RVY/5IQYKN6Wm09FhDA6ocFCDKW0C9lf28GSximxEW
+                KTH/DB/FyTK19y7UygM4Qw9eknFT7oNlZABd4fvBjBHwxfNNd53IOaEVn56As8jv
+                g2jExvgv7/i62K2KE1zXI0P8SoOLyWXiYlo2uvyLzv21dNBWRAyOd9cpNndq7YsK
+                qqWW0jUyL1dpytJ4Czw8O+1UiAP3oK61k1hepZMPtrdKUZIbhGNnoCiZrfkb715Q
+                c04YhqhUzaCmm+Ui1KxJfGrheLNind0YV3udwdMAHVQninKvTCC0Rp5SwrwvC72x
+                IdrMAzUSKCQ8sKWUzcq8ddquBFP9nA==
+                -----END CERTIFICATE-----
+              owner: ubuntu:ubuntu
+            - path: /home/ubuntu/ssl_certificate/ssl.key
+              content: |
+                -----BEGIN PRIVATE KEY-----
+                MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDW0bRipMFGNCyd
+                9rtaf5ZtBXFJ8whT9NKPGN19dKwfY9JDxXWinfqNXSAH6w/RT4xv3GQkWNANoxoZ
+                4Kf80PY/MzBdJlCV9atlG/Mg+nQ1C/SkVk92Ya+Yd+U+BRXBelv4ohU9C9dcXUj+
+                p7EBbCl2p9XsKf0UQs1yMdpjsokOxJHmkZPJnhEF1soJOMtYr3zK2XSUGvBJ8zB6
+                5z50q//B2QdAwI4V4vh+F3DoLFQ/BY23I9AUZNdmD9u/JXMoHpFWJ3a/WE76YSgQ
+                ZU3lT6kq1sxSCVe3v/T0fTRsjoGtgOnUNmRr7y2dCivYrwIex8WrZPk48Rbb6lii
+                jkQEdfXPAgMBAAECggEAX6WnZ3RsCdIZO4wsBzNfytLtijuHrboINmaf18gnCyLq
+                7/nvUqR8dozMQjpLJKsCoJvEitpwaGICsRryMQLpYWJtWkxA/UQROEeljT12mFfm
+                aXV0lAUSphRcIa0p7qeIY7/nLPMkxJ9UbO5FRZjfLVG1Uh2v7WGBECNaVaGcnNHf
+                entkz6Q2XW2OwGeMNlPXc4d00xPYjqHkF6uzlyBDRT4PwYLZEz4A0pL/YIB2PpOj
+                ySGRwBOV/y/gDgn6+RhUXYi7U8e6RGMsqBAFiIYL81ApLuQKqIsQXHHV8UfdTxNJ
+                hsdvgNU7UC7eSENOv6Gx0eUmj6OILZHfZTkgaUwMIQKBgQD/j3oDN1nDFfZ2LXoz
+                W5EPx5AoNdgLvqKmEVaTRTq3VjoSXk+EvbJKmpPy9Xif8tjfYm+tDd1lhgzRw3U2
+                Yg/YTYCmgkM2qLiQbhtbMLnltmteKYKKidOYRjer81vXwHJ7+giyCB68kxtATN4e
+                wpo3o5lYzALjorVV/k0mYwCMiwKBgQDXMEojpxFVHdkhzJl13MNYWU7FB3i6V1sv
+                VWOC1tXNTXb6OOv6YHHqaxPhcJSNmVOT7z1Azfu5KKMRTPrezdGvHxDs+ZKaXvIs
+                FQAZcVn2L8cWb3AVQRqSKoPWJBUpz/6Y24nmZQk4UR3sJn1pY0NDrEh7XGIuuNIT
+                dXiwHukQTQKBgQDp7hXL1+DMmNAQATT4yfqRLSWiCReIOKp9xSUwjZBfvghORBIZ
+                +eK4M6L2JQiTsSIf6OU8zZI5mmklofsrGrxSTS9UO6z23Z6EZqWX5ZRk14SUnv6l
+                feA4ZR4UwiDx73FcVtWa0aABEc9CHpq8IXo1MAXwqF6ErK2815kbaEhaXQKBgQDW
+                ANg6jLPYCk8eJfOYG2zKOEb1+3A9IRM2B51nSXBnNFrWjjVgUvn3P3YOBYA3MfzE
+                anBoOnHUum0xj3UOj3GwzxxuD+WUUEhXPqtSoj/tbaZ40WqOOKjMJCvokwnZA1kX
+                e32w+1on/8PaToz6ehUy/+s1g7LA9F03rOPRg2wVIQKBgQDiuph/Mb5HyMH2YTUV
+                5Jnv6Ro2RDo0wD+MIvGCeDSKjhMP/CTxdE6AyTveE5fQXOdAs7RSgoD34HA/xnnC
+                sfD5NsU9GcHfSYi1FVsusujN30lqrdjDKfXO4/spKtn9/2K1BwWTduw2NE4BPCE5
+                W5MvOAw81WlRadDCGWeTxGEF/Q==
+                -----END PRIVATE KEY-----
+              owner: ubuntu:ubuntu
+            - path: /home/ubuntu/db-init.sh
+              content: |
+                #!/bin/bash -e
+
+                DB_ROOT_PASSWORD=$1
+                ETLEAP_DB_PASSWORD=$2
+                SALESFORCE_DB_PASSWORD=$3
+                ORG_NAME=$4
+
+                mysql -h$ETLEAP_RDS_HOSTNAME -uroot -p$DB_ROOT_PASSWORD <<EOF
+                CREATE DATABASE IF NOT EXISTS etleap;
+                GRANT ALL PRIVILEGES ON etleap.* TO 'etleap-prod'@'%' IDENTIFIED BY "$ETLEAP_DB_PASSWORD";
+
+                CREATE DATABASE IF NOT EXISTS salesforce;
+                USE salesforce;
+                GRANT ALL PRIVILEGES ON salesforce.* TO 'salesforce'@'%' IDENTIFIED BY "$SALESFORCE_DB_PASSWORD";
+                CREATE TABLE IF NOT EXISTS jobs (id bigint(20) NOT NULL AUTO_INCREMENT,
+                  user_hash varchar(64) NOT NULL,
+                  job_id varchar(64) NOT NULL,
+                  first_batch_id varchar(64),
+                  query_hash varchar(64) NOT NULL,
+                  bulk_api_calls int(11) NOT NULL,
+                  failed tinyint(1) NOT NULL DEFAULT 0,
+                  create_date datetime NOT NULL,
+                  PRIMARY KEY (id),
+                  UNIQUE KEY (user_hash, job_id),
+                  INDEX user_hash_create_date (user_hash, create_date)
+                ) ENGINE=InnoDB;
+
+                FLUSH PRIVILEGES;
+
+                EOF
+
+                exit 0
+              owner: ubuntu:ubuntu
+              permissions: "0755"
+            - path: /home/ubuntu/.etleap
+              content: |
+                export CUSTOMER_VPC=1
+                export ETLEAP_DEPLOYMENT_ID=${DeploymentId}
+                export USE_PROD_SECRETS=0
+                export JOB_ROLE=customer_job,monitor
+                export ETLEAP_DB_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapDBPassword} | jq -r .SecretString)"
+                export SALESFORCE_DB_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapDBSalesforcePassword} | jq -r .SecretString)"
+                export ETLEAP_HOSTS_ALLOWED="${PublicHostnameOrIp}"
+                export FRONT_END_HOSTNAME="${PublicHostnameOrIp}"
+                export ETLEAP_FRONT_END_URL="https://${PublicHostnameOrIp}/"
+                export ETLEAP_CORS_ALLOWED_ORIGINS="https://${PublicHostnameOrIp}"
+                export API_HOSTNAME="${PublicHostnameOrIp}"
+                export API_URL="https://$API_HOSTNAME/"
+                export ETLEAP_BASE_URL=$API_URL
+                export ETLEAP_CONF_FILE=/opt/etleap/prod-customervpc.conf
+                export ETLEAP_HTTP_SESSION_DOMAIN="${PublicHostnameOrIp}"
+                export ETLEAP_KMS_KEY_VIRGINIA="${EtleapKMS}"
+                export ETLEAP_SETUP_FIRST_NAME="${FirstName}"
+                export ETLEAP_SETUP_LAST_NAME="${LastName}"
+                export ETLEAP_SETUP_EMAIL="${Email}"
+                export ETLEAP_SETUP_PASSWORD="${EtleapSetupPassword}"
+                export ETLEAP_SETUP_ADMIN_PASSWORD="$(aws secretsmanager get-secret-value --secret-id ${EtleapAdminPassword} | jq -r .SecretString)"
+                export ETLEAP_SETUP_INTERMEDIATE_BUCKET=${S3IntermediateBucket}
+                export ETLEAP_SETUP_INTERMEDIATE_ROLE_ARN="${S3IntermediateRole}"
+                export ENABLE_YSJES='true'
+                export ETLEAP_DEPLOYMENT_ROLE="customervpc"
+                export ETLEAP_SECRET_APPLICATION_SECRET="$(aws secretsmanager get-secret-value --secret-id ${DeploymentSecret} | jq -r .SecretString)"
+                export ETLEAP_RDS_HOSTNAME="${RDSHostname}"
+                export ETLEAP_EMR_HOSTNAME="${EMRHostname}"
+                export ETLEAP_YSJES_HOSTNAME="${MasterAppPrivateIp}"
+                export ETLEAP_MAIN_APP_IP="${MasterAppPrivateIp}"
+                export MARKETPLACE_DEPLOYMENT="${MarketplaceDeployment}"
+                export ETLEAP_AWS_ACCCOUNT_ID="${AWS::AccountId}"
+              owner: ubuntu:ubuntu
+
+            runcmd:
+            - aws configure set region `curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region`
+            - 'sed -i ''s/"dns": \[".*"\]/"dns": ["169.254.169.253"]/g'' /etc/docker/daemon.json'
+            - service docker restart
+            - . /home/ubuntu/.etleap &&/home/ubuntu/db-init.sh $(aws secretsmanager get-secret-value --secret-id ${RootDBPassword} | jq -r .SecretString) $(aws secretsmanager get-secret-value --secret-id ${EtleapDBPassword} | jq -r .SecretString) $(aws secretsmanager get-secret-value --secret-id ${EtleapDBSalesforcePassword} | jq -r .SecretString) ${DeploymentId}
+            - yes | ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''
+            - cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+            - su ubuntu -c ". /home/ubuntu/.etleap && /home/ubuntu/cron-deploy-customervpc.sh"
+          - DeploymentId: !Ref DeploymentId
+            RootDBPassword: !Ref EtleapDBRootPassword
+            EtleapDBPassword: !Ref EtleapDBPassword
+            EtleapDBSalesforcePassword: !Ref EtleapDBSalesforcePassword
+            EtleapAdminPassword: !Ref EtleapAdminPassword
+            EtleapSetupPassword: !Ref SetupPassword
+            S3IntermediateRole: !GetAtt S3IntermediateRole.Arn
+            DeploymentSecret: !If [GenerateNewDeploymentSecret, !Ref GeneratedDeploymentSecret, !Ref UserSpecifiedDeploymentSecret]
+            RDSHostname: !GetAtt EtleapDB.Endpoint.Address
+            MasterAppPrivateIp: "127.0.0.1"
+            EMRHostname: !GetAtt EtleapEMR.MasterPublicDNS
+            PublicHostnameOrIp: !If
+              - HAMode
+              - !Sub 
+                - "$(echo ${DNS} | tr '[:upper:]' '[:lower:]')"
+                - DNS: !GetAtt EtleapLoadBalancer.DNSName
+              - "$(curl -sS http://169.254.169.254/latest/meta-data/public-ipv4)"
+            MarketplaceDeployment: !If [MarketplaceDeployment, "true", "false"]
+
+  S3IntermediateBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Join ["-", [!Sub "etleap-${AWS::AccountId}-intermediate", !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]]]
+
+  S3IntermediateRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument: !Sub 
+        - |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::${AWS::AccountId}:root"
+                },
+                "Action": "sts:AssumeRole",
+                "Condition": {
+                  "StringEquals": { "sts:ExternalId": "${ExternalID}" }
+                }
+              }
+            ]
+          }
+        - ExternalID: !If [ MarketplaceDeployment, !Ref "AWS::AccountId", !Ref DeploymentId ]
+
+  S3IntermediatePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "EtleapIntermediate"
+      PolicyDocument: !Sub |
+        {
+          "Statement":[{
+            "Effect":"Allow",
+            "Action":[
+              "s3:GetObject",
+              "s3:ListBucket",
+              "s3:PutObject",
+              "s3:DeleteObject"
+            ],
+            "Resource":[
+              "arn:aws:s3:::${S3IntermediateBucket}",
+              "arn:aws:s3:::${S3IntermediateBucket}/*"
+            ]
+          }]
+        }
+      Roles:
+        - Ref: S3IntermediateRole
+
+  EtleapAppInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref EtleapAppRole
+
+  EtleapEIPA:
+    Type: "AWS::EC2::EIP"
+    Condition: HAMode
+    Properties:
+      Domain: "vpc"
+      InstanceId: !Ref EtleapAppA
+
+  EtleapEIPB:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: "vpc"
+      InstanceId: !Ref EtleapAppB
+
+  EtleapEMR:
+    Type: "AWS::EMR::Cluster"
+    Properties:
+      Name: "Etleap EMR"
+      ReleaseLabel: "emr-5.22.0"
+      VisibleToAllUsers: true
+      Applications:
+        - Name: Hadoop
+        - Name: Spark
+      AutoScalingRole: !Ref EtleapEMRAutoscalingDefaultRole
+      Configurations:
+        - Classification: "hadoop-env"
+          Configurations:
+            - Classification: export
+              ConfigurationProperties:
+                HADOOP_USER_CLASSPATH_FIRST: "true"
+        - Classification: "yarn-site"
+          ConfigurationProperties:
+            yarn.resourcemanager.scheduler.class: "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler"
+            yarn.scheduler.fair.preemption: "true"
+            yarn.log-aggregation-enable: "true"
+            yarn.log-aggregation.retain-seconds: "7200"
+            yarn.nodemanager.remote-app-log-dir: "/log"
+            yarn.node-labels.am.default-node-label-expression: "CORE_OR_TASK"
+            yarn.nodemanager.node-labels.provider: "config"
+            yarn.nodemanager.node-labels.provider.configured-node-partition: "CORE_OR_TASK"
+        - Classification: "capacity-scheduler"
+          ConfigurationProperties:
+            yarn.scheduler.capacity.root.accessible-node-labels.CORE.capacity: "0"
+            yarn.scheduler.capacity.root.accessible-node-labels.CORE_OR_TASK.capacity: "100"
+            yarn.scheduler.capacity.root.default.accessible-node-labels.CORE.capacity: "0"
+            yarn.scheduler.capacity.root.default.accessible-node-labels.CORE_OR_TASK.capacity: "100"
+        - Classification: "mapred-site"
+          ConfigurationProperties:
+            mapreduce.job.counters.limit: "512"
+            mapreduce.client.submit.file.replication: "2"
+        - Classification: "emrfs-site"
+          ConfigurationProperties:
+            fs.s3.enableServerSideEncryption: "true"
+        - Classification: "spark-defaults"
+          ConfigurationProperties:
+            spark.history.fs.cleaner.enabled: "true"
+            spark.history.fs.cleaner.interval: "1h"
+            spark.history.fs.cleaner.maxAge: "3h"
+      JobFlowRole: !Ref EtleapEMRInstanceProfile
+      ServiceRole: !Ref EtleapEMRDefaultRole
+      Instances:
+        CoreInstanceGroup:
+          EbsConfiguration:
+            EbsBlockDeviceConfigs:
+              - VolumeSpecification:
+                  SizeInGB: 512
+                  VolumeType: gp2
+                VolumesPerInstance: 1
+          InstanceCount: 1
+          Market: ON_DEMAND
+          InstanceType: c5.xlarge
+          Name: "CORE"
+        MasterInstanceGroup:
+          EbsConfiguration:
+            EbsBlockDeviceConfigs:
+              - VolumeSpecification:
+                  SizeInGB: 128
+                  VolumeType: gp2
+                VolumesPerInstance: 1
+          InstanceCount: 1
+          Market: ON_DEMAND
+          InstanceType: m5.xlarge
+          Name: "MASTER"
+        Ec2SubnetId: !If [CreateVPC, !Ref EtleapPrivateSubnetB, !Ref PrivateSubnetB]
+        AdditionalMasterSecurityGroups:
+          - Ref: EtleapInternalSecurityGroup
+        AdditionalSlaveSecurityGroups:
+          - Ref: EtleapInternalSecurityGroup
+        Ec2KeyName: !Ref KeyPairName
+      Steps:
+        - ActionOnFailure: CANCEL_AND_WAIT
+          Name: "Initalize HDFS"
+          HadoopJarStep:
+            Args:
+              - bash
+              - /hdfs-init.sh
+            Jar: "command-runner.jar"
+      BootstrapActions:
+        - Name: "Configure Fair Scheduler"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/download-fair-scheduler-config.sh"
+        - Name: "Add Etleap-provided JARs"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/add-app-provided-libs.sh"
+        - Name: "Replace the Java keystore with Etleap's"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/install-etleap-keystore.sh"
+        - Name: "Set TCP keepalive"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/set-tcp-keepalive.sh"
+        - Name: "Copy HDFS init script"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/copy-hdfs-init.sh"
+        - Name: "Install Kinesis Agent"
+          ScriptBootstrapAction:
+            Path: !Sub "s3://etleap-emr-${AWS::Region}/conf-hadoop2/install-kinesis-agent.sh"
+            Args:
+              - !Ref AWS::AccountId
+              - !GetAtt EtleapAppBNetworkInterface.PrimaryPrivateIpAddress
+              - !If [ MarketplaceDeployment, "true", "false" ]
+
+  EMRTask:
+    Type: "AWS::EMR::InstanceGroupConfig"
+    Properties:
+      EbsConfiguration:
+        EbsBlockDeviceConfigs:
+          - VolumeSpecification:
+              SizeInGB: 64
+              VolumeType: gp2
+            VolumesPerInstance: 1
+      InstanceCount: 1
+      Market: SPOT
+      BidPrice: "0.21"
+      InstanceRole: TASK
+      InstanceType: c5.xlarge
+      JobFlowId: !Ref EtleapEMR
+      Name: "TASK SPOT"
+      AutoScalingPolicy:
+        Constraints:
+          MaxCapacity: 100
+          MinCapacity: 1
+        Rules:
+          - Action:
+              SimpleScalingPolicyConfiguration:
+                AdjustmentType: CHANGE_IN_CAPACITY
+                ScalingAdjustment: 1
+                CoolDown: 300
+            Name: ScaleOutOnContainersPendingRatio
+            Description: "Scale out if ContainerPendingRatio is more than 1"
+            Trigger:
+              CloudWatchAlarmDefinition:
+                ComparisonOperator: GREATER_THAN
+                EvaluationPeriods: 1
+                MetricName: ContainerPendingRation
+                Namespace: "AWS/ElasticMapReduce"
+                Period: 300
+                Statistic: AVERAGE
+                Threshold: 1.0
+                Unit: COUNT
+          - Action:
+              SimpleScalingPolicyConfiguration:
+                AdjustmentType: CHANGE_IN_CAPACITY
+                ScalingAdjustment: -1
+                CoolDown: 300
+            Name: ScaleInOnContainersPendingRatio
+            Description: "Scale in if ContainerPendingRatio is more than 0.5"
+            Trigger:
+              CloudWatchAlarmDefinition:
+                ComparisonOperator: LESS_THAN
+                EvaluationPeriods: 1
+                MetricName: ContainerPendingRation
+                Namespace: "AWS/ElasticMapReduce"
+                Period: 300
+                Statistic: AVERAGE
+                Threshold: 0.5
+                Unit: COUNT
+
+Outputs:
+  EtleapUrl:
+    Value: !If [HAMode, !Sub ["https://${ALBDNS}", { ALBDNS: !GetAtt EtleapLoadBalancer.DNSName }], !Sub "https://${EtleapEIPB}/" ]
+  EtleapLoginEmail:
+    Value: !Ref Email
+  EtleapSetupPassword:
+    Value: !Ref SetupPassword
+  ElteapDeploymentSecret:
+    Value: !If [GenerateNewDeploymentSecret, !Ref GeneratedDeploymentSecret, !Ref UserSpecifiedDeploymentSecret]
